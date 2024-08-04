@@ -3,6 +3,9 @@ package in;
 import model.*;
 import service.AuditService;
 import service.SearchService;
+
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -10,9 +13,11 @@ import java.util.Scanner;
 
 public class SearchController {
     private SearchService searchService;
+    private AuditService auditService;
 
-    public SearchController(SearchService searchService) {
+    public SearchController(SearchService searchService, AuditService auditService) {
         this.searchService = searchService;
+        this.auditService = auditService;
     }
 
     public void searchCars() {
@@ -115,6 +120,18 @@ public class SearchController {
         List<AuditLog> filteredLogs = searchService.filterLogs(startDate, endDate, user, action);
             for (AuditLog log : filteredLogs) {
             System.out.println(log);
+        }
+    }
+    public void exportLogs() {
+        List<AuditLog> logs = auditService.getAllLogs();
+
+        try (FileWriter writer = new FileWriter("audit_logs.txt")) {
+            for (AuditLog log : logs) {
+                writer.write(log.toString() + "\n");
+            }
+            System.out.println("Log files successfully exported to audit_logs.txt");
+        } catch (IOException e) {
+            System.out.println("Error while exporting log files: " + e.getMessage());
         }
     }
 }

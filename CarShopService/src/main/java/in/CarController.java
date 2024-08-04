@@ -32,7 +32,6 @@ public class CarController {
         System.out.print("Input price: ");
         double price = scanner.nextDouble();
         scanner.nextLine(); // consume newline
-        System.out.print("Input car status: AVAILABLE, RESERVED, SOLD");
         CarStatus status = CarStatus.AVAILABLE;
 
         Car newCar = new Car(carService.getNextId(), brand, model, year, price, status);
@@ -67,18 +66,18 @@ public class CarController {
             car.setStatus(status);
 
             carService.updateCar(car);
-            System.out.println("Информация об автомобиле обновлена.");
+            System.out.println("Car info successfully updated.");
         } else {
-            System.out.println("Автомобиль не найден.");
+            System.out.println("The car is not found.");
         }
     }
 
     public void deleteCar() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Введите ID автомобиля: ");
+        System.out.print("Input car ID: ");
         int carId = scanner.nextInt();
 
         carService.deleteCar(carId);
-        System.out.println("Автомобиль удален.");
+        System.out.println("The car is deleted successfully.");
     }
 }

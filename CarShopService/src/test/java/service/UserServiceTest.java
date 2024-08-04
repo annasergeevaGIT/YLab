@@ -1,9 +1,11 @@
 package service;
 
+
+import model.User;
+import model.UserRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import out.EmployeeService;
-import repository.EmployeeRepository;
+import repository.UserRepository;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,35 +13,36 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-public class EmployeeServiceTest {
+public class UserServiceTest {
 
-    private EmployeeService employeeService;
-    private EmployeeRepository employeeRepository;
+    private UserService userService;
+    private UserRepository userRepository;
 
     @BeforeEach
-    public void setUp() {
-        employeeRepository = mock(EmployeeRepository.class);
-        employeeService = new EmployeeService(employeeRepository);
+    void setUp() {
+        userRepository = mock(UserRepository.class);
+        userService = new UserService(userRepository);
     }
 
     @Test
-    public void addEmployee_success() {
-        Employee employee = new Employee("john_doe", "John Doe", "Manager");
-        employeeService.addEmployee(employee);
+    void testGetAllUsers() {
+        User user1 = new User(1, "user1", "password1", UserRole.CUSTOMER);
+        User user2 = new User(2, "user2", "password2", UserRole.MANAGER);
+        when(userRepository.findAll()).thenReturn(Arrays.asList(user1, user2));
 
-        verify(employeeRepository, times(1)).addEmployee(employee);
+        List<User> users = userService.getAllUsers();
+
+        assertThat(users).hasSize(2);
+        assertThat(users).contains(user1, user2);
     }
 
     @Test
-    public void listEmployees_returnsEmployees() {
-        Employee employee1 = new Employee("john_doe", "John Doe", "Manager");
-        Employee employee2 = new Employee("jane_doe", "Jane Doe", "Sales");
-        when(employeeRepository.getAllEmployees()).thenReturn(Arrays.asList(employee1, employee2));
+    void testGetUserById() {
+        User user = new User(1, "user1", "password1", UserRole.CUSTOMER);
+        when(userRepository.findById(1)).thenReturn(user);
 
-        List<Employee> employees = employeeService.listEmployees();
+        User foundUser = userService.getUserById(1);
 
-        assertThat(employees).hasSize(2);
-        assertThat(employees).contains(employee1, employee2);
+        assertThat(foundUser).isEqualTo(user);
     }
 }
-

@@ -42,9 +42,4 @@ public class AuthController {
             return null;
         }
     }
-
-    public void exportLogs(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("input the Log-data filename: ");
-    }
 }

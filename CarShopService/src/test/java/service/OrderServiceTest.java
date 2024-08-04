@@ -1,11 +1,11 @@
 package service;
 
-import out.Order;
-import model.User;
+import model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import out.OrderRepository;
-import out.OrderService;
+import repository.CarRepository;
+import repository.OrderRepository;
+import repository.UserRepository;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,30 +17,43 @@ public class OrderServiceTest {
 
     private OrderService orderService;
     private OrderRepository orderRepository;
+    private CarRepository carRepository;
+    private UserRepository userRepository;
+    private AuditService auditService;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         orderRepository = mock(OrderRepository.class);
-        orderService = new OrderService(orderRepository);
+        carRepository = mock(CarRepository.class);
+        userRepository = mock(UserRepository.class);
+        auditService = mock(AuditService.class);
+        orderService = new OrderService(orderRepository, carRepository, userRepository, auditService);
     }
 
     @Test
-    public void placeOrder_success() {
-        Order order = new Order("Order1", "Toyota Corolla", new User("john_doe", "password", Role.CUSTOMER));
-        orderService.placeOrder(order);
+    void testGetAllOrders() {
+        Car car = new Car(1, "Toyota", "Camry", 2020, 25000, CarStatus.AVAILABLE);
+        User user = new User(1, "customer", "password", UserRole.CUSTOMER);
+        Order order1 = new Order(1, car, user, OrderStatus.PENDING);
+        Order order2 = new Order(2, car, user, OrderStatus.APPROVED);
+        when(orderRepository.findAll()).thenReturn(Arrays.asList(order1, order2));
 
-        verify(orderRepository, times(1)).addOrder(order);
-    }
-
-    @Test
-    public void listOrders_returnsOrders() {
-        Order order1 = new Order("Order1", "Toyota Corolla", new User("john_doe", "password", Role.CUSTOMER));
-        Order order2 = new Order("Order2", "Honda Civic", new User("jane_doe", "password", Role.CUSTOMER));
-        when(orderRepository.getAllOrders()).thenReturn(Arrays.asList(order1, order2));
-
-        List<Order> orders = orderService.listOrders();
+        List<Order> orders = orderService.getAllOrders();
 
         assertThat(orders).hasSize(2);
         assertThat(orders).contains(order1, order2);
+    }
+
+    @Test
+    void testCreateOrder() {
+        Car car = new Car(1, "Toyota", "Camry", 2020, 25000, CarStatus.AVAILABLE);
+        User customer = new User(1, "customer", "password", UserRole.CUSTOMER);
+        when(carRepository.findById(1)).thenReturn(car);
+        when(userRepository.findById(1)).thenReturn(customer);
+
+        orderService.createOrder(1, 1);
+
+        verify(orderRepository, times(1)).save(any(Order.class));
+        verify(auditService, times(1)).logAction(customer, "Created order for car: Toyota Camry");
     }
 }

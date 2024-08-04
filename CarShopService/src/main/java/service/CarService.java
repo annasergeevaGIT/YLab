@@ -1,6 +1,7 @@
 package service;
 
 import model.Car;
+import model.User;
 import repository.CarRepository;
 
 import java.util.List;
@@ -8,9 +9,11 @@ import java.util.stream.Collectors;
 
 public class CarService {
     private CarRepository carRepository;
+    private AuditService auditService;
 
-    public CarService(CarRepository carRepository) {
+    public CarService(CarRepository carRepository, AuditService auditService) {
         this.carRepository = carRepository;
+        this.auditService = auditService;
     }
 
     public List<Car> getAllCars() {

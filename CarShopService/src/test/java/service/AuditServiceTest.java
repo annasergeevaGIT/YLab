@@ -1,50 +1,50 @@
 package service;
 
-import out.AuditLog;
+import model.AuditLog;
 import model.User;
+import model.UserRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import out.AuditService;
+import repository.AuditRepository;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 public class AuditServiceTest {
 
     private AuditService auditService;
+    private AuditRepository auditRepository;
 
     @BeforeEach
-    public void setUp() {
-        auditService = new AuditService();
+    void setUp() {
+        auditRepository = mock(AuditRepository.class);
+        auditService = new AuditService(auditRepository);
     }
 
     @Test
-    public void logAction_success() {
-        User user = new User("john_doe", "password", Role.CUSTOMER);
-        auditService.logAction("Login", user);
+    void testLogAction() {
+        User user = new User(1, "admin", "password", UserRole.ADMIN);
+        String action = "Added car: Toyota Camry";
 
-        List<AuditLog> logs = auditService.getLogs();
-        assertThat(logs).hasSize(1);
-        assertThat(logs.get(0).getAction()).isEqualTo("Login");
+        auditService.logAction(user, action);
+
+        verify(auditRepository, times(1)).save(any(AuditLog.class));
     }
 
     @Test
-    public void exportLogsToFile_success() throws FileNotFoundException {
-        User user = new User("john_doe", "password", Role.CUSTOMER);
-        auditService.logAction("Login", user);
+    void testGetAllLogs() {
+        User user = new User(1, "admin", "password", UserRole.ADMIN);
+        AuditLog log1 = new AuditLog(1, user, "Action 1", LocalDateTime.now());
+        AuditLog log2 = new AuditLog(2, user, "Action 2", LocalDateTime.now());
+        when(auditRepository.findAll()).thenReturn(Arrays.asList(log1, log2));
 
-        String filename = "audit_logs.txt";
-        auditService.exportLogsToFile(filename);
+        List<AuditLog> logs = auditService.getAllLogs();
 
-        File file = new File(filename);
-        assertThat(file.exists()).isTrue();
-
-        Scanner scanner = new Scanner(file);
-        assertThat(scanner.hasNextLine()).isTrue();
-        scanner.close();
+        assertThat(logs).hasSize(2);
+        assertThat(logs).contains(log1, log2);
     }
 }

@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class AuditService {
     private AuditRepository auditRepository;
 
+
     /**
      * Constructs an AuditService.
      *
@@ -23,6 +24,7 @@ public class AuditService {
      */
     public AuditService(AuditRepository auditRepository) {
         this.auditRepository = auditRepository;
+
     }
 
     /**
@@ -32,8 +34,8 @@ public class AuditService {
      * @param action the action performed by the user
      */
     public void logAction(User user, String action) {
-        AuditLog auditLog = new AuditLog(auditRepository.getNextId(), user, action, LocalDateTime.now());
-        auditRepository.save(auditLog);
+        AuditLog log = new AuditLog(auditRepository.getNextId(), user, action, LocalDateTime.now());
+        auditRepository.save(log);
     }
 
     /**
@@ -45,6 +47,7 @@ public class AuditService {
      * @param action    the action type to filter by (can be null)
      * @return the list of filtered audit log entries
      */
+
     public List<AuditLog> filterLogs(LocalDateTime startDate, LocalDateTime endDate, User user, String action) {
         return auditRepository.findAll().stream()
                 .filter(log -> (startDate == null || !log.getTimestamp().isBefore(startDate)) &&
@@ -53,4 +56,13 @@ public class AuditService {
                         (action == null || log.getAction().equals(action)))
                 .collect(Collectors.toList());
     }
+
+    /**
+     *
+     * @return all log files
+     */
+    public List<AuditLog> getAllLogs() {
+        return auditRepository.findAll();
+    }
 }
+

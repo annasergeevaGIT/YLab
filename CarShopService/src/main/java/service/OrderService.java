@@ -11,7 +11,7 @@ public class OrderService {
     private OrderRepository orderRepository;
     private CarRepository carRepository;
     private UserRepository userRepository;
-    private AuditRepository auditRepository;
+    private AuditService auditService;
 
     /**
      * Constructs an OrderService.
@@ -19,14 +19,14 @@ public class OrderService {
      * @param orderRepository the repository for orders
      * @param carRepository   the repository for cars
      * @param userRepository  the repository for users
-     * @param auditRepository    the service for logging actions
+     * @param auditService    the service for logging actions
      */
 
-    public OrderService(OrderRepository orderRepository, CarRepository carRepository, UserRepository userRepository, AuditRepository auditRepository) {
+    public OrderService(OrderRepository orderRepository, CarRepository carRepository, UserRepository userRepository, AuditService auditService) {
         this.orderRepository = orderRepository;
         this.carRepository = carRepository;
         this.userRepository = userRepository;
-        this.auditRepository = auditRepository;
+        this.auditService = auditService;
     }
 
     /**
@@ -52,12 +52,11 @@ public class OrderService {
             Order newOrder = new Order(orderRepository.getNextId(), car, user, OrderStatus.PENDING);
             orderRepository.save(newOrder);
 
-            // Log the creation of the order
-            auditRepository.logAction(user, "Created order for car ID " + carId);
-
             // Mark the car as unavailable and update its status in the repository
             car.setStatus(CarStatus.RESERVED);
             carRepository.update(car);
+            // Log the creation of the order
+            auditService.logAction(user, "Created order for car: " + car.getBrand() + " " + car.getModel());
         } else {
             throw new IllegalArgumentException("Car or customer not found.");
         }
@@ -71,10 +70,12 @@ public class OrderService {
 
     public void updateOrderStatus(int orderId, OrderStatus status) {
         Order order = orderRepository.findById(orderId);
+        User user = order.getUser();
         if (order != null) {
             order.setStatus(status);
             orderRepository.update(order);
-
+            // Log
+            auditService.logAction(user, "Updated order status to " + status + " for order ID: " + orderId);
             if (status == OrderStatus.CANCELLED) {
                 order.getCar().setStatus(CarStatus.AVAILABLE);
             } else if (status == OrderStatus.COMPLETED) {
@@ -90,11 +91,14 @@ public class OrderService {
      */
     public void cancelOrder(int orderId) {
         Order order = orderRepository.findById(orderId);
+        User user = order.getUser();
         if (order != null) {
             order.setStatus(OrderStatus.CANCELLED);
             order.getCar().setStatus(CarStatus.AVAILABLE);
             orderRepository.update(order);
             carRepository.update(order.getCar());
+            // Log
+            auditService.logAction(user, "Cancelled order ID: " + orderId);
         }
     }
 }

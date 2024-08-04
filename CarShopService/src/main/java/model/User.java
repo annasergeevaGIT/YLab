@@ -11,7 +11,7 @@ public class User {
     private String username;
     private String password;
     private UserRole role;
-    //private int orderCount;
+
     /**
      * Constructs a new User.
      *
@@ -19,7 +19,6 @@ public class User {
      * @param username     the username of the user
      * @param password     the password of the user
      * @param role         the role of the user (CUSTOMER, MANAGER, ADMIN)
-     //* @param orderCount   counting orders with status(COMPLETED) for particular user
      */
 
     public User(int id, String username, String password, UserRole role) {
@@ -27,7 +26,6 @@ public class User {
         this.username = username;
         this.password = password;
         this.role = role;
-        //this.orderCount = orderCount;
     }
 }
 

@@ -32,4 +32,8 @@ public class UserService {
     public int getNextId() {
         return userRepository.getNextId();
     }
+
+    public User getUserById(int userID) {
+        return userRepository.findById(userID);
+    }
 }

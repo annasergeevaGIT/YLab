@@ -15,16 +15,17 @@ public class Main {
         OrderRepository orderRepository = new OrderRepository();
         AuditRepository auditRepository = new AuditRepository();
 
-        AuthService authService = new AuthService(userRepository);
+        AuditService auditService = new AuditService(auditRepository);
+        AuthService authService = new AuthService(userRepository,auditService);
         UserService userService = new UserService(userRepository);
-        CarService carService = new CarService(carRepository);
+        CarService carService = new CarService(carRepository,auditService);
         SearchService searchService = new SearchService(carRepository,orderRepository,userRepository, auditRepository);
-        OrderService orderService = new OrderService(orderRepository, carRepository, userRepository, auditRepository);
+        OrderService orderService = new OrderService(orderRepository, carRepository, userRepository, auditService);
 
         AuthController authController = new AuthController(authService);
         UserController userController = new UserController(userService);
         CarController carController = new CarController(carService);
-        SearchController searchController = new SearchController(searchService);
+        SearchController searchController = new SearchController(searchService, auditService);
         OrderController orderController = new OrderController(orderService);
 
         Scanner scanner = new Scanner(System.in);
@@ -45,7 +46,7 @@ public class Main {
                 loggedInUser = authController.login();
                     if (loggedInUser != null) {
                         if (loggedInUser.getRole() == UserRole.ADMIN) {
-                            adminMenu(scanner, userController, carController, orderController, searchController, authController);
+                            adminMenu(scanner, userController, loggedInUser, carController, orderController, searchController, authController);
                         } else if (loggedInUser.getRole() == UserRole.MANAGER) {
                             managerMenu(scanner, carController, orderController, searchController);
                         } else if (loggedInUser.getRole() == UserRole.CUSTOMER) {
@@ -60,7 +61,6 @@ public class Main {
         }
     }
 
-
     private static void mainMenu() {
         System.out.println("1. Регистрация");
         System.out.println("2. Вход");
@@ -68,15 +68,17 @@ public class Main {
         System.out.print("Выберите опцию: ");
     }
 
-    private static void adminMenu(Scanner scanner, UserController userController, CarController carController, OrderController orderController, SearchController searchController, AuthController authController) {
+    private static void adminMenu(Scanner scanner, UserController userController,User loggedInUser, CarController carController, OrderController orderController, SearchController searchController, AuthController authController) {
         while (true) {
-            System.out.println("1. List users");
+            System.out.println("1. List all users");
             System.out.println("2. Change user role");
             System.out.println("3. Add new user");
             System.out.println("4. Add new car");
+            System.out.println("17. List all cars");
             System.out.println("5. Update car information");
             System.out.println("6. Delete car");
-            System.out.println("7. List orders");
+            System.out.println("18. Place an order");
+            System.out.println("7. List all orders");
             System.out.println("8. Update the order status");
             System.out.println("9. Cancel orders");
             System.out.println("10. Search cars");
@@ -103,11 +105,17 @@ public class Main {
                 case 4:
                     carController.addCar();
                     break;
+                case 17:
+                    carController.listCars();
+                    break;
                 case 5:
                     carController.updateCar();
                     break;
                 case 6:
                     carController.deleteCar();
+                    break;
+                case 18:
+                    orderController.createOrder(loggedInUser.getId());
                     break;
                 case 7:
                     orderController.listOrders();
@@ -134,7 +142,7 @@ public class Main {
                     searchController.filterAuditLogs();
                     break;
                 case 15:
-                    authController.exportLogs();
+                    searchController.exportLogs();
                     break;
                 case 16:
                     System.out.println("Exit.");

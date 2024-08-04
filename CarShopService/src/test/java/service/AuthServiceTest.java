@@ -13,33 +13,46 @@ public class AuthServiceTest {
 
     private AuthService authService;
     private UserRepository userRepository;
-
+    private AuditService auditService;
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         userRepository = mock(UserRepository.class);
-        authService = new AuthService(userRepository);
+        authService = new AuthService(userRepository, auditService);
     }
 
     @Test
-    public void registerUser_success() {
-        User user = new User("john_doe", "password", UserRole.CUSTOMER);
-        when(userRepository.addUser(user)).thenReturn(true);
+    void testRegister() {
+        User user = new User(0, "testUser", "password", UserRole.CUSTOMER);
+        authService.register("testUser", "password");
 
-        boolean result = authService.registerUser("john_doe", "password", UserRole.CUSTOMER);
-
-        assertThat(result).isTrue();
-        verify(userRepository, times(1)).addUser(user);
+        verify(userRepository, times(1)).save(any(User.class));
     }
 
     @Test
-    public void loginUser_success() {
-        User user = new User("john_doe", "password", UserRole.CUSTOMER);
-        when(userRepository.getUserByUsername("john_doe")).thenReturn(user);
+    void testLogin() {
+        User user = new User(1, "testUser", "password", UserRole.CUSTOMER);
+        when(userRepository.findByUsername("testUser")).thenReturn(user);
 
-        User result = authService.login("john_doe", "password");
+        User result = authService.login("testUser", "password");
 
         assertThat(result).isNotNull();
-        assertThat(result.getUsername()).isEqualTo("john_doe");
+        assertThat(result.getUsername()).isEqualTo("testUser");
+    }
+
+    @Test
+    void testLoginWithInvalidCredentials() {
+        User user = new User(1, "testUser", "password", UserRole.CUSTOMER);
+        when(userRepository.findByUsername("testUser")).thenReturn(user);
+
+        User result = authService.login("testUser", "wrongPassword");
+
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void testLoginWithNonExistentUser() {
+        when(userRepository.findByUsername("nonExistentUser")).thenReturn(null);
+        User result = authService.login("nonExistentUser", "password");
+        assertThat(result).isNull();
     }
 }
-
