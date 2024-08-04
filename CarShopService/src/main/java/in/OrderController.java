@@ -16,16 +16,16 @@ public class OrderController {
     public void listOrders() {
         List<Order> orders = orderService.getAllOrders();
         for (Order order : orders) {
-            System.out.println("ID: " + order.getId() + ", Car: " + order.getCar().getBrand() + " " + order.getCar().getModel() + ", Customer: " + order.getUser().getUsername() + ", Статус: " + order.getStatus());
+            System.out.println("ID: " + order.getId() + ", Car: " + order.getCar().getBrand() + " " + order.getCar().getModel() + ", Customer: " + order.getUser().getUsername() + ", Status: " + order.getStatus());
         }
     }
 
     public void createOrder(int customerId) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Введите ID автомобиля: ");
+        System.out.print("Input the car ID: ");
         int carId = scanner.nextInt();
         orderService.createOrder(carId, customerId);
-        System.out.println("Заказ создан.");
+        System.out.println("Order is created.");
     }
 
     public void updateOrderStatus() {
