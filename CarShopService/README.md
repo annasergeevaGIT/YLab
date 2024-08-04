@@ -7,7 +7,7 @@ A simple console application for managing a car dealership. Supports user regist
 - **model**: Contains classes for data representation.
 - **service**: Contains the application logic.
 - **in**: Controllers for handling input.
-- **out**: Repositories for data storage.
+- **out**: Repositories for data storage. Currently empty
 - **main**: The entry point of the application.
 
 ## Build and Run
@@ -16,12 +16,22 @@ A simple console application for managing a car dealership. Supports user regist
 3. Compile the project: `javac main/Main.java`
 4. Run the project: `java main.Main`
 
-## Usage
-1. When the application starts, a root Admin will be created with the login `root` and password `root`.
-2. Register a new user or log in with an existing login.
-3. Login as root Admin to manage user roles and add new users.
-4. Users with the ADMIN and MANAGER roles can manage vehicles and orders.
-5. Users with the CUSTOMER role can view available vehicles and create orders.
+## Пример использования:
+
+Регистрация и авторизация пользователей:
+
+Пользователь с ролью ADMIN с логином "root" и паролем "root" создается автоматически при запуске приложения .
+
+Авторизация пользователей:
+Пользователь может войти в систему с использованием имени пользователя и пароля, автоматически присвоена роль CUSTOMER, которую может изменить ADMIN.
+
+Управление автомобилями и заказами:
+ADMIN и MANAGER могут просматривать, добавлять, редактировать и удалять автомобили.
+ADMIN и MANAGER могут управлять заказами.
+CUSTOMER может просматривать доступные автомобили и создавать заказы.
+
+Экспорт журналов аудита:
+ADMIN может экспортировать журналы аудита в файл.
 
 # Features
 User registration and authentication (admin, manager, customer).
@@ -80,106 +90,4 @@ CarShopService/
 ├── pom.xml
 └── README.md
 
-# Installation
-Ensure you have Java 17 and Maven installed.
-Clone the repository:
-git clone https://github.com/annasergeevaGIT/YLab
-Navigate to the project directory:
-cd CarShopService
-Build the project using Maven:
-mvn clean install
 
-# Running the Application
-After a successful build, run the following command to start the application:
-mvn exec:java -Dexec.mainClass="Main"
-Follow the console instructions to interact with the application.
-
-# Testing
-To run tests, execute the following command:
-mvn test
-
-# Usage Examples
-1. Register a New User
-To register a new user, run the application and select the registration option. You will be prompted to enter the username, password, and role.
-Enter command: register
-Enter username: john_doe
-Enter password: password123
-Enter role (ADMIN, MANAGER, CUSTOMER): CUSTOMER
-User registered successfully.
-
-2. Login
-To login, use the following command and provide your username and password.
-Enter command: login
-Enter username: john_doe
-Enter password: password123
-Login successful.
-
-3. Add a New Car
-After logging in as an administrator or manager, you can add a new car to the inventory.
-Enter command: add_car
-Enter car make: Toyota
-Enter car model: Corolla
-Enter car year: 2020
-Enter car price: 20000
-Enter car condition (New, Used): New
-Car added successfully.
-
-4. List All Cars
-To view all cars in the inventory, use the following command.
-Enter command: list_cars
-Toyota Corolla (2020) - $20000 - New
-Honda Civic (2019) - $18000 - Used
-
-5. Place an Order
-To place an order, specify the car model and customer information.
-Enter command: place_order
-Enter car model: Toyota Corolla
-Enter customer username: john_doe
-Order placed successfully.
-
-6. Update an Order Status
-Update the status of an existing order.
-Enter command: update_order_status
-Enter order ID: Order1
-Enter new status (PENDING, COMPLETED, CANCELED): COMPLETED
-Order status updated successfully.
-
-7. View Order History
-To view the history of orders, use the following command.
-Enter command: view_orders
-Order ID: Order1 - Toyota Corolla - john_doe - COMPLETED
-Order ID: Order2 - Honda Civic - jane_doe - PENDING
-
-8. Add a Customer
-Add a new customer to the system.
-Enter command: add_customer
-Enter username: jane_doe
-Enter full name: Jane Doe
-Enter contact information: 987-654-3210
-Customer added successfully.
-
-9. List All Customers
-List all customers in the system.
-Enter command: list_customers
-Username: john_doe - John Doe - 123-456-7890
-Username: jane_doe - Jane Doe - 987-654-3210
-
-10. Add an Employee
-Add a new employee to the system.
-Enter command: add_employee
-Enter username: admin
-Enter full name: Admin User
-Enter role: Manager
-Employee added successfully.
-
-11. Export Audit Log
-Export the audit log to a text file for analysis.
-Enter command: export_audit_log
-Enter filename: audit_logs.txt
-Audit log exported successfully.
-
-12. View Audit Log
-View the audit log to see recent actions.
-Enter command: view_audit_log
-Action: Login - User: john_doe - Date: 2024-08-03T10:15:00
-Action: Add Car - User: admin - Date: 2024-08-03T10:20:00

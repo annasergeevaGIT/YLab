@@ -6,24 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="99672b35-4a95-439f-824d-13b1d2355a68" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/in/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/in/CarController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/CarController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/in/SearchController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/SearchController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repository/AuditRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repository/AuditRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/AuditService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/AuditService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/CarService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/CarService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/OrderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/SearchService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/SearchService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/repository/OrderRepositoryTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/service/AuditServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/service/AuditServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/service/AuthServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/service/AuthServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/service/CarServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/service/CarServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/service/OrderServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/service/OrderServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/service/SearchServiceTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/service/UserServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/in/AuthControllerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/in/CarControllerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/in/OrderControllerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/in/UserControllerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/main/MainTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -160,7 +147,7 @@
       <workItem from="1722611894791" duration="15304000" />
       <workItem from="1722682914972" duration="36450000" />
       <workItem from="1722726153863" duration="5306000" />
-      <workItem from="1722749289574" duration="21604000" />
+      <workItem from="1722749289574" duration="22272000" />
     </task>
     <servers />
   </component>
