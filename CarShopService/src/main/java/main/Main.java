@@ -55,17 +55,17 @@ public class Main {
                     }
                 }
              else if(choice == 3) {
-                System.out.print("Exiting");
+                System.out.print("Bye!");
                 break;
             }
         }
     }
 
     private static void mainMenu() {
-        System.out.println("1. Register a new user");
-        System.out.println("2. Login a user");
-        System.out.println("3. Exit");
-        System.out.print("Choose an option: ");
+        System.out.println("1. Регистрация");
+        System.out.println("2. Вход");
+        System.out.println("3. Выход");
+        System.out.print("Выберите опцию: ");
     }
 
     private static void adminMenu(Scanner scanner, UserController userController,User loggedInUser, CarController carController, OrderController orderController, SearchController searchController, AuthController authController) {

@@ -17,7 +17,7 @@ public class AuthService {
 
     public boolean register(String username, String password) {
         if (userRepository.findByUsername(username) != null) {
-            return false; // User already exist
+            return false; // Пользователь уже существует
         }
         User newUser = new User(userRepository.getNextId(), username, password, UserRole.CUSTOMER);
         userRepository.save(newUser);

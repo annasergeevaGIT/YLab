@@ -45,7 +45,8 @@ public class SearchController {
                 year, price, status.isEmpty() ? null : CarStatus.valueOf(status));
 
         for (Car car : cars) {
-            System.out.println(car);
+            System.out.println("ID: " + car.getId() + ", Марка: " + car.getBrand() + ", Модель: " + car.getModel() +
+                    ", Год: " + car.getYear() + ", Цена: " + car.getPrice() + ", Статус: " + car.getStatus());
         }
     }
 
