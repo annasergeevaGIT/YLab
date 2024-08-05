@@ -1,8 +1,6 @@
 package model;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
 /**
  * Represents the Order in the system.
  */
@@ -15,10 +13,11 @@ public class Order {
     private OrderStatus status;
 
     /**
+     * Constructs a new Order with the specified id, car, customer, and status.
      *
-     * @param id     the unique identifier for the user
-     * @param car
-     * @param user
-     * @param status represents the order status (PENDING, APPROVED, CANCELLED, COMPLETED)
+     * @param id       the order's ID
+     * @param car      the car associated with the order
+     * @param user     the user who placed the order
+     * @param status   the order's status
      */
 }

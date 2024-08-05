@@ -14,7 +14,7 @@ public class OrderService {
     private AuditService auditService;
 
     /**
-     * Constructs an OrderService.
+     * Constructs an OrderService with the specified repositories and AuditService.
      *
      * @param orderRepository the repository for orders
      * @param carRepository   the repository for cars
@@ -42,7 +42,7 @@ public class OrderService {
      *
      * @param carId     the ID of the car to order
      * @param customerId the ID of the customer placing the order
-     * @return the created order
+     * @return the created order if successful, else throws an exception
      */
     public void createOrder(int carId, int customerId) {
         Car car = carRepository.findById(carId);
@@ -63,9 +63,10 @@ public class OrderService {
     }
 
     /**
-     * Update Order
-     * @param orderId
-     * @param status
+     * Update the existing order.
+     *
+     * @param orderId order ID
+     * @param status  new status of the order (AVAILABLE, RESERVED, SOLD)
      */
 
     public void updateOrderStatus(int orderId, OrderStatus status) {
@@ -86,8 +87,9 @@ public class OrderService {
     }
 
     /**
-     * Cancel Order
-     * @param orderId
+     * Cancel the order.
+     *
+     * @param orderId order ID
      */
     public void cancelOrder(int orderId) {
         Order order = orderRepository.findById(orderId);
@@ -97,8 +99,7 @@ public class OrderService {
             order.getCar().setStatus(CarStatus.AVAILABLE);
             orderRepository.update(order);
             carRepository.update(order.getCar());
-            // Log
-            auditService.logAction(user, "Cancelled order ID: " + orderId);
+            auditService.logAction(user, "Cancelled order ID: " + orderId); // Audit log
         }
     }
 }

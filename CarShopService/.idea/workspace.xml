@@ -5,10 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99672b35-4a95-439f-824d-13b1d2355a68" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/in/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/in/CarController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/CarController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/in/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/in/SearchController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/SearchController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/in/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Car.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Car.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/CarStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/CarStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/OrderStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/OrderStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/UserRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/UserRole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/repository/CarRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repository/CarRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/CarService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/CarService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/OrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/SearchService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/SearchService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/service/CarServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/service/CarServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,6 +105,9 @@
       <recent name="C:\Users\sirge\dev\java\YLab\CarShopService\src\main\java\model" />
       <recent name="C:\Users\sirge\dev\java\YLab\CarShopService\src\main\java\in" />
     </key>
+    <key name="MoveMembersDialog.RECENTS_KEY">
+      <recent name="in.MenuController" />
+    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="service" />
       <recent name="" />
@@ -149,7 +169,7 @@
       <workItem from="1722749289574" duration="23007000" />
       <workItem from="1722796489942" duration="820000" />
       <workItem from="1722797330399" duration="659000" />
-      <workItem from="1722854999130" duration="2209000" />
+      <workItem from="1722854999130" duration="10410000" />
     </task>
     <servers />
   </component>

@@ -5,10 +5,16 @@ import service.OrderService;
 
 import java.util.List;
 import java.util.Scanner;
-
+/**
+ * Controller for managing user input to perform order manipulation.
+ */
 public class OrderController {
     private OrderService orderService;
-
+    /**
+     * Constructs an OrderController with the specified OrderService and AuthService.
+     *
+     * @param orderService the service for managing orders
+     */
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
@@ -20,14 +26,22 @@ public class OrderController {
         }
     }
 
+    /**
+     * Managing user input to create a new order.
+     *
+     * @param customerId
+     */
     public void createOrder(int customerId) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Введите ID автомобиля: ");
+        System.out.print("Input car ID: ");
         int carId = scanner.nextInt();
         orderService.createOrder(carId, customerId);
-        System.out.println("Заказ создан.");
+        System.out.println("Order created!.");
     }
 
+    /**
+     * Managing user input to update the status of an order.
+     */
     public void updateOrderStatus() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Input order ID: ");
@@ -35,11 +49,13 @@ public class OrderController {
         System.out.print("Input new order status (PENDING, APPROVED, CANCELLED, COMPLETED): ");
         String statusStr = scanner.next();
         OrderStatus status = OrderStatus.valueOf(statusStr.toUpperCase());
-
         orderService.updateOrderStatus(orderId, status);
         System.out.println("Order is updated.");
     }
 
+    /**
+     * Managing user input to cancel an order.
+     */
     public void cancelOrder() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Input order ID: ");

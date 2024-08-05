@@ -16,12 +16,13 @@ public class CarServiceTest {
     private CarService carService;
     private CarRepository carRepository;
     private AuditService auditService;
+    private AuthService authService;
 
     @BeforeEach
     void setUp() {
         carRepository = mock(CarRepository.class);
         auditService = mock(AuditService.class);
-        carService = new CarService(carRepository, auditService);
+        carService = new CarService(carRepository, auditService, authService);
     }
 
     @Test

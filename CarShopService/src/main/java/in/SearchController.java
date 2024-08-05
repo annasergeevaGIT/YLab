@@ -10,16 +10,26 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
-
+/**
+ * Controller for searching and exporting logs.
+ */
 public class SearchController {
     private SearchService searchService;
     private AuditService auditService;
 
+    /**
+     * Constructs a SearchController with the specified AuditService.
+     *
+     * @param auditService the service for managing audit logs
+     */
     public SearchController(SearchService searchService, AuditService auditService) {
         this.searchService = searchService;
         this.auditService = auditService;
     }
 
+    /**
+     * Managing user input to search cars by different parameters.
+     */
     public void searchCars() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Input car mark (or leave empty): ");
@@ -50,6 +60,9 @@ public class SearchController {
         }
     }
 
+    /**
+     * Managing user input to search orders by different parameters.
+     */
     public void searchOrders() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Input User ID (or leave empty): ");
@@ -79,6 +92,9 @@ public class SearchController {
         }
     }
 
+    /**
+     * Managing user input to filter user by role.
+     */
     public void filterUsersByRole() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Choose user role (CUSTOMER, USER, ADMIN) or leave empty: ");
@@ -91,6 +107,9 @@ public class SearchController {
         }
     }
 
+    /**
+     * Managing user input to filter user by purchase count.
+     */
     public int sortUsersByPurchases() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Choose car mark (or leave empty): ");
@@ -98,6 +117,9 @@ public class SearchController {
         return searchService.getPurchaseCount(userId);
     }
 
+    /**
+     * Managing user input to filter audit logs.
+     */
     public void filterAuditLogs() {
         Scanner scanner = new Scanner(System.in);
 
@@ -122,6 +144,10 @@ public class SearchController {
             System.out.println(log);
         }
     }
+
+    /**
+     * Exports audit logs to a file.
+     */
     public void exportLogs() {
         List<AuditLog> logs = auditService.getAllLogs();
 

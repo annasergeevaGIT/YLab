@@ -8,6 +8,9 @@ import service.*;
 
 import java.util.Scanner;
 
+/**
+ * The main class
+ */
 public class Main {
     public static void main(String[] args) {
         UserRepository userRepository = new UserRepository();
@@ -18,7 +21,7 @@ public class Main {
         AuditService auditService = new AuditService(auditRepository);
         AuthService authService = new AuthService(userRepository,auditService);
         UserService userService = new UserService(userRepository);
-        CarService carService = new CarService(carRepository,auditService);
+        CarService carService = new CarService(carRepository,auditService,authService);
         SearchService searchService = new SearchService(carRepository,orderRepository,userRepository, auditRepository);
         OrderService orderService = new OrderService(orderRepository, carRepository, userRepository, auditService);
 
@@ -61,33 +64,46 @@ public class Main {
         }
     }
 
+    /**
+     * Shows an entry menu for all user roles.
+     */
     private static void mainMenu() {
-        System.out.println("1. Регистрация");
-        System.out.println("2. Вход");
-        System.out.println("3. Выход");
-        System.out.print("Выберите опцию: ");
+        System.out.println("1. Register, 2. Login, 3.Exit");
+        System.out.print("Choose an option: ");
     }
 
+    /**
+     * Shows admin menu, let to perform actions based on the choice.
+     *
+     * @param scanner
+     * @param userController
+     * @param loggedInUser
+     * @param carController
+     * @param orderController
+     * @param searchController
+     * @param authController
+     */
     private static void adminMenu(Scanner scanner, UserController userController,User loggedInUser, CarController carController, OrderController orderController, SearchController searchController, AuthController authController) {
         while (true) {
             System.out.println("1. List all users");
             System.out.println("2. Change user role");
             System.out.println("3. Add new user");
-            System.out.println("4. Add new car");
-            System.out.println("17. List all cars");
-            System.out.println("5. Update car information");
-            System.out.println("6. Delete car");
-            System.out.println("18. Place an order");
-            System.out.println("7. List all orders");
-            System.out.println("8. Update the order status");
-            System.out.println("9. Cancel orders");
-            System.out.println("10. Search cars");
-            System.out.println("11. Search orders");
-            System.out.println("12. Search users by role");
-            System.out.println("13. Search users by order count"); // doesnt work
-            System.out.println("14. Filter Audit Logs");
-            System.out.println("15. Export Audit Logs");
-            System.out.println("16. Exit");
+            System.out.println("4. Remove user");
+            System.out.println("5. Add new car");
+            System.out.println("6. List all cars");
+            System.out.println("7. Update car information");
+            System.out.println("8. Delete car");
+            System.out.println("9. Place an order");
+            System.out.println("10. List all orders");
+            System.out.println("11. Update the order status");
+            System.out.println("12. Cancel orders");
+            System.out.println("13. Search cars");
+            System.out.println("14. Search orders");
+            System.out.println("15. Search users by role");
+            System.out.println("16. Search users by order count"); // doesnt work
+            System.out.println("17. Filter Audit Logs");
+            System.out.println("18. Export Audit Logs");
+            System.out.println("19. Exit");
             System.out.print("Choose and option: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // consume newline
@@ -103,48 +119,51 @@ public class Main {
                     userController.addUser();
                     break;
                 case 4:
-                    carController.addCar();
-                    break;
-                case 17:
-                    carController.listCars();
+                    userController.removeUser();
                     break;
                 case 5:
-                    carController.updateCar();
-                    break;
-                case 6:
-                    carController.deleteCar();
-                    break;
-                case 18:
-                    orderController.createOrder(loggedInUser.getId());
-                    break;
-                case 7:
-                    orderController.listOrders();
-                    break;
-                case 8:
-                    orderController.updateOrderStatus();
-                    break;
-                case 9:
-                    orderController.cancelOrder();
-                    break;
-                case 10:
                     carController.addCar();
                     break;
-                case 11:
+                case 6:
+                    carController.listCars();
+                    break;
+                case 7:
                     carController.updateCar();
                     break;
+                case 8:
+                    carController.deleteCar();
+                    break;
+                case 9:
+                    orderController.createOrder(loggedInUser.getId());
+                    break;
+                case 10:
+                    orderController.listOrders();
+                    break;
+                case 11:
+                    orderController.updateOrderStatus();
+                    break;
                 case 12:
-                    searchController.filterUsersByRole();
+                    orderController.cancelOrder();
                     break;
                 case 13:
-                    searchController.sortUsersByPurchases();
+                    searchController.searchCars();
                     break;
                 case 14:
-                    searchController.filterAuditLogs();
+                    searchController.searchOrders();
                     break;
                 case 15:
-                    searchController.exportLogs();
+                    searchController.filterUsersByRole();
                     break;
                 case 16:
+                    searchController.sortUsersByPurchases();
+                    break;
+                case 17:
+                    searchController.filterAuditLogs();
+                    break;
+                case 18:
+                    searchController.exportLogs();
+                    break;
+                case 19:
                     System.out.println("Exit.");
                     return;
                 default:
@@ -153,6 +172,14 @@ public class Main {
         }
     }
 
+    /**
+     * Shows manager menu, let to perform actions based on the choice.
+     *
+     * @param scanner
+     * @param carController
+     * @param orderController
+     * @param searchController
+     */
     private static void managerMenu(Scanner scanner, CarController carController, OrderController orderController, SearchController searchController) {
         while (true) {
             System.out.println("1. Search cars");
@@ -211,6 +238,15 @@ public class Main {
         }
     }
 
+    /**
+     * Shows customer menu, let to perform actions based on the choice.
+     *
+     * @param scanner
+     * @param carController
+     * @param orderController
+     * @param loggedInUser
+     * @param searchController
+     */
     private static void customerMenu(Scanner scanner, CarController carController, OrderController orderController, User loggedInUser, SearchController searchController) {
         while (true) {
             System.out.println("1. List cars");

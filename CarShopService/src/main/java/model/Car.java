@@ -1,12 +1,8 @@
 package model;
-
-
 import lombok.Data;
-
 /**
  * Represents a car in the system.
  */
-
 @Data
 public class Car {
     private int id;
@@ -17,13 +13,14 @@ public class Car {
     private CarStatus status;
 
     /**
+     * Constructs a new Car with the specified id, brand, model, year, price, and status.
      *
-     * @param id
-     * @param brand
-     * @param model
-     * @param year
-     * @param price
-     * @param status  represents the status of the car (AVAILABLE, RESERVED, SOLD)
+     * @param id     the car's ID
+     * @param brand  the car's brand
+     * @param model  the car's model
+     * @param year   the car's manufacturing year
+     * @param price  the car's price
+     * @param status the car's status
      */
 
     public Car(int id, String brand, String model, int year, double price, CarStatus status) {

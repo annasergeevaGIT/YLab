@@ -3,7 +3,9 @@ package repository;
 import model.Car;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Repository to store cars.
+ */
 public class CarRepository {
     private List<Car> cars = new ArrayList<>();
     private int nextId = 1;

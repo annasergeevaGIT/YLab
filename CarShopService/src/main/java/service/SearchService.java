@@ -2,19 +2,26 @@ package service;
 
 import model.*;
 import repository.*;
-
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Service to perform search in the car, user and order repositories.
+ */
 public class SearchService {
     private CarRepository carRepository;
     private OrderRepository orderRepository;
     private UserRepository userRepository;
     private AuditRepository auditRepository;
 
+    /**
+     * Constructor
+     * @param carRepository
+     * @param orderRepository
+     * @param userRepository
+     * @param auditRepository
+     */
     public SearchService(CarRepository carRepository, OrderRepository orderRepository, UserRepository userRepository, AuditRepository auditRepository) {
         this.carRepository = carRepository;
         this.orderRepository = orderRepository;
@@ -22,6 +29,16 @@ public class SearchService {
         this.auditRepository = auditRepository;
     }
 
+    /**
+     * Search cas by different parameters.
+     *
+     * @param brand
+     * @param model
+     * @param year
+     * @param price
+     * @param status car status (AVAILABLE, RESERVED, SOLD)
+     * @return the list of cars found
+     */
     public List<Car> searchCars(String brand, String model, Integer year, Double price, CarStatus status) {
         return carRepository.findAll().stream()
                 .filter(car -> (brand == null || car.getBrand().equalsIgnoreCase(brand)) &&
@@ -32,6 +49,14 @@ public class SearchService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Search Orders by different parameters.
+     *
+     * @param customerId user ID
+     * @param status     order status (PENDING, APPROVED, CANCELLED, COMPLETED)
+     * @param carId      car ID
+     * @return the list of orders found
+     */
     public List<Order> searchOrders(Integer customerId, OrderStatus status, Integer carId) {
         return orderRepository.findAll().stream()
                 .filter(order -> (customerId == null || order.getUser().getId() == customerId) &&
@@ -39,11 +64,29 @@ public class SearchService {
                         (carId == null || order.getCar().getId() == carId))
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Search users by role.
+     *
+     * @param role user role (ADMIN, MANAGER, CUSTOMER)
+     * @return the list of users found
+     */
     public List<User> filterUsersByRole(String role) {
         return userRepository.findAll().stream()
                 .filter(user -> role == null || user.getRole().toString().equalsIgnoreCase(role))
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Search user by username
+     *
+     * @param username name of the user
+     * @return the user found
+     */
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
     /**
      * Gets the purchase count for a user. *should be updated to stream
      *
@@ -72,9 +115,5 @@ public class SearchService {
                         (user == null || log.getUser().equals(user)) &&
                         (action == null || log.getAction().equalsIgnoreCase(action)))
                 .collect(Collectors.toList());
-    }
-
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
     }
 }

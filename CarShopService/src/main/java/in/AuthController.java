@@ -2,9 +2,10 @@ package in;
 
 import model.User;
 import service.AuthService;
-
 import java.util.Scanner;
-
+/**
+ * Handling user input for logging and authorisation actions.
+ */
 public class AuthController {
     private AuthService authService;
 
@@ -12,6 +13,9 @@ public class AuthController {
         this.authService = authService;
     }
 
+    /**
+     * User input to register a new user.
+     */
     public void register() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Login: ");
@@ -26,6 +30,9 @@ public class AuthController {
         }
     }
 
+    /**
+     * User input to log in.
+     */
     public User login() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Login: ");
