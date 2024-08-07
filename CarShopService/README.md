@@ -13,8 +13,8 @@ A simple console application for managing a car dealership. Supports user regist
 ## Build and Run
 1. Clone the repository.
 2. Navigate to the project directory.
-3. Compile the project: `javac main/Main.java`
-4. Run the project: `java main.Main`
+3. Compile the project: `mvn compile`
+4. Run the project: `java -cp .\target\classes org.example.Main`
 
 ## Пример использования:
 

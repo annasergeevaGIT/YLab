@@ -36,3 +36,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# User ignores
+audit_logs.txt
