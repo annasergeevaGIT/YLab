@@ -1,6 +1,6 @@
 # YLab
 
-##Homework1 Link:
+Homework1 Link:
 
 https://github.com/annasergeevaGIT/YLab/pull/4  
 
