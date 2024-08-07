@@ -1,5 +1,5 @@
 # YLab
-This repository is for practising Java-Spring
+
 Link:
 
 https://github.com/annasergeevaGIT/YLab/pull/4  
