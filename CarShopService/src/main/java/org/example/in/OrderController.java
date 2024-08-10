@@ -1,7 +1,10 @@
 package org.example.in;
 
+import lombok.AllArgsConstructor;
 import org.example.model.Order;
 import org.example.model.OrderStatus;
+import org.example.model.User;
+import org.example.service.AuthService;
 import org.example.service.OrderService;
 
 import java.util.List;
@@ -9,34 +12,35 @@ import java.util.Scanner;
 /**
  * Controller for managing user input to perform order manipulation.
  */
+@AllArgsConstructor
 public class OrderController {
     private OrderService orderService;
-    /**
-     * Constructs an OrderController with the specified OrderService and AuthService.
-     *
-     * @param orderService the service for managing orders
-     */
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
-    }
+    private AuthService authService;
 
+    /**
+     * Print an ArrayList with all orders.
+     */
     public void listOrders() {
         List<Order> orders = orderService.getAllOrders();
         for (Order order : orders) {
-            System.out.println("ID: " + order.getId() + ", Car: " + order.getCar().getBrand() + " " + order.getCar().getModel() + ", Customer: " + order.getUser().getUsername() + ", Статус: " + order.getStatus());
+            System.out.printf("ID: %d, Car: %s %s, User: %s, Status: %s%n",
+                    order.getId(),
+                    order.getCar().getBrand(),
+                    order.getCar().getModel(),
+                    order.getUser().getUsername(),
+                    order.getStatus());
         }
     }
 
     /**
      * Managing user input to create a new order.
-     *
-     * @param customerId
      */
-    public void createOrder(int customerId) {
+    public void createOrder() {
+        User loggedInUser = authService.getCurrentUser();
         Scanner scanner = new Scanner(System.in);
         System.out.print("Input car ID: ");
         int carId = scanner.nextInt();
-        orderService.createOrder(carId, customerId);
+        orderService.createOrder(carId, loggedInUser.getId());
         System.out.println("Order created!.");
     }
 

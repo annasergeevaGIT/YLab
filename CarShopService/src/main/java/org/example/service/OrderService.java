@@ -2,6 +2,8 @@ package org.example.service;
 
 import org.example.model.*;
 import org.example.repository.*;
+
+import java.util.ArrayList;
 import java.util.List;
 /**
  * Service for managing orders.
@@ -48,8 +50,8 @@ public class OrderService {
         User user = userRepository.findById(customerId);
 
         if (car != null && user != null && "AVAILABLE".equalsIgnoreCase(String.valueOf(car.getStatus()))) {
-            Order newOrder = new Order(orderRepository.getNextId(), car, user, OrderStatus.PENDING);
-            orderRepository.save(newOrder);
+            Order newOrder = new Order(car, user, OrderStatus.PENDING);
+            orderRepository.create(newOrder);
 
             // Mark the car as unavailable and update its status in the repository
             car.setStatus(CarStatus.RESERVED);
@@ -80,6 +82,13 @@ public class OrderService {
                 order.getCar().setStatus(CarStatus.AVAILABLE);
             } else if (status == OrderStatus.COMPLETED) {
                 order.getCar().setStatus(CarStatus.SOLD);
+                //Add the completed order to the users list of orders
+                List<Order> userOrders = user.getOrders();
+                if (userOrders == null) {
+                    userOrders = new ArrayList<Order>();
+                }
+                userOrders.add(order);
+                user.setOrders(userOrders);
             }
             carRepository.update(order.getCar());
         }
@@ -98,7 +107,7 @@ public class OrderService {
             order.getCar().setStatus(CarStatus.AVAILABLE);
             orderRepository.update(order);
             carRepository.update(order.getCar());
-            auditService.logAction(user, "Cancelled order ID: " + orderId); // Audit log
+            auditService.logAction(user, "Cancelled order ID: " + orderId + "User ID:" + user.getId()); // Audit log
         }
     }
 }

@@ -1,5 +1,6 @@
 package org.example.in;
 
+import lombok.AllArgsConstructor;
 import org.example.model.UserRole;
 import org.example.model.User;
 import org.example.service.UserService;
@@ -8,12 +9,9 @@ import java.util.Scanner;
 /**
  * Handling user (admin) input to manipulate with user.
  */
+@AllArgsConstructor
 public class UserController {
     private UserService userService;
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     /**
      *  Pring all users registered in the system with all roles.
@@ -51,8 +49,7 @@ public class UserController {
         String roleStr = scanner.nextLine();
         UserRole role = UserRole.valueOf(roleStr.toUpperCase());
 
-        User newUser = new User(userService.getNextId(), username, password, role);
-        userService.addUser(newUser);
+        userService.addUser(username, password, role);
         System.out.println("User is added.");
     }
 

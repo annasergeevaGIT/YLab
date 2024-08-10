@@ -1,45 +1,35 @@
 package org.example.repository;
 
 import org.example.model.Car;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 /**
  * Repository to store cars.
  */
+
 public class CarRepository {
-    private List<Car> cars = new ArrayList<>();
-    private int nextId = 1;
+    private Map<Integer, Car> cars = new HashMap<>();
+
+    public void create(Car car) {
+        cars.put(car.getId(), car);
+    }
 
     public List<Car> findAll() {
-        return cars;
+        return new ArrayList<>(cars.values());
     }
 
     public Car findById(int id) {
-        return cars.stream().filter(car -> car.getId() == id).findFirst().orElse(null);
-    }
-
-    public void save(Car car) {
-        car.setId(nextId++);
-        cars.add(car);
+        return cars.values().stream().filter(car -> car.getId() == id).findFirst().orElse(null);
     }
 
     public void update(Car car) {
-        Car existingCar = findById(car.getId());
-        if (existingCar != null) {
-            existingCar.setBrand(car.getBrand());
-            existingCar.setModel(car.getModel());
-            existingCar.setYear(car.getYear());
-            existingCar.setPrice(car.getPrice());
-            existingCar.setStatus(car.getStatus());
+        if (cars.containsKey(car.getId())) {
+            cars.put(car.getId(), car);
         }
     }
 
-    public void deleteById(int id) {
-        cars.removeIf(car -> car.getId() == id);
-    }
-
-    public int getNextId() {
-        return nextId;
+    public void delete(int id) {
+        cars.remove(id);
     }
 }
 

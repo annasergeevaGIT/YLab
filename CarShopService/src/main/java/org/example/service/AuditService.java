@@ -32,8 +32,8 @@ public class AuditService {
      * @param action the action performed by the user
      */
     public void logAction(User user, String action) {
-        AuditLog log = new AuditLog(auditRepository.getNextId(), user, action, LocalDateTime.now());
-        auditRepository.save(log);
+        AuditLog log = new AuditLog( user, action, LocalDateTime.now());
+        auditRepository.create(log);
     }
 
     /**

@@ -1,24 +1,21 @@
 package org.example.repository;
 
 import org.example.model.AuditLog;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Repository for managing audit logs.
  */
 public class AuditRepository {
-    private List<AuditLog> logs = new ArrayList<>();
-    private int nextId = 1;
+    private Map<Integer,AuditLog> logs = new HashMap<>();
 
     /**
      * Saves an audit log entry to the repository.
      *
      * @param log the audit log entry to save
      */
-    public void save(AuditLog log) {
-        log = new AuditLog(getNextId(), log.getUser(), log.getAction(), log.getTimestamp());
-        logs.add(log);
+    public void create(AuditLog log) {
+        logs.put(log.getId(), log);
     }
 
     /**
@@ -27,7 +24,7 @@ public class AuditRepository {
      * @return the list of audit log entries
      */
     public List<AuditLog> findAll() {
-        return logs;
+        return new ArrayList<>(logs.values());
     }
 
     /**
@@ -35,8 +32,4 @@ public class AuditRepository {
      *
      * @return the next audit log ID
      */
-    public int getNextId() {
-        return nextId++;
-    }
-
 }

@@ -7,8 +7,22 @@ import java.util.*;
  * Repository to store users.
  */
 public class UserRepository {
-    private  List<User> users = new ArrayList<>();
-    private  int nextID = 1;
+    private  Map<Integer, User> users = new HashMap<>();
+    /**
+     * Adding a new user to the repo.
+     * @param user to add
+     */
+    public void create(User user) {
+        users.put(user.getId(), user);
+    }
+
+    /**
+     * Find all users in the repo
+     * @return array list containing users
+     */
+    public List<User> findAll() {
+        return new ArrayList<>(users.values());
+    }
 
     /**
      * Find user by ID
@@ -16,7 +30,7 @@ public class UserRepository {
      * @return the user found, else null
      */
     public User findById(int id) {
-        return users.stream()
+        return users.values().stream()
                 .filter(user -> user.getId() == id)
                 .findFirst().orElse(null);
     }
@@ -27,17 +41,9 @@ public class UserRepository {
      * @return the user found, else null
      */
     public User findByUsername(String username) {
-        return users.stream()
+        return users.values().stream()
                 .filter(user -> user.getUsername().equals(username))
                 .findFirst().orElse(null);
-    }
-
-    /**
-     * Adding a new user to the repo.
-     * @param user to add
-     */
-    public void save(User user) {
-        users.add(user);
     }
 
     /**
@@ -45,28 +51,9 @@ public class UserRepository {
      * @param user to update
      */
     public void update(User user) {
-        User existingUser = findById(user.getId());
-        if (existingUser != null) {
-            existingUser.setUsername(user.getUsername());
-            existingUser.setPassword(user.getPassword());
-            existingUser.setRole(user.getRole());
+        if (users.containsKey(user.getId())) {
+            users.put(user.getId(), user);
         }
-    }
-
-    /**
-     * Find all users in the repo
-     * @return array list containing users
-     */
-    public List<User> findAll() {
-        return new ArrayList<>(users);
-    }
-
-    /**
-     * Generate next ID
-     * @return
-     */
-    public int getNextId(){
-        return nextID++;
     }
 
     /**
@@ -74,7 +61,7 @@ public class UserRepository {
      * @param id user ID
      * @return true if deleted
      */
-    public boolean deleteById(int id) {
-        return users.removeIf(user -> user.getId() == id);
+    public boolean delete(int id) {
+        return users.remove(id) != null;
     }
 }

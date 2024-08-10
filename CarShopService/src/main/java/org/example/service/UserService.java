@@ -1,4 +1,5 @@
 package org.example.service;
+import lombok.AllArgsConstructor;
 import org.example.model.UserRole;
 import org.example.model.User;
 import org.example.repository.UserRepository;
@@ -7,17 +8,9 @@ import java.util.List;
 /**
  * Service for user management.
  */
+@AllArgsConstructor
 public class UserService {
     private UserRepository userRepository;
-
-    /**
-     * Constructs a new UserService.
-     *
-     * @param userRepository the user repository
-     */
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     /**
      * Gets all users.
@@ -26,7 +19,6 @@ public class UserService {
      */
     public List<User> getAllUsers() {
         return userRepository.findAll();
-
     }
 
     /**
@@ -57,17 +49,11 @@ public class UserService {
      * Adding a user in the user repository.
      * @param user the user to add
      */
-    public void addUser(User user) {
-        userRepository.save(user);
+    public void addUser(String username, String password, UserRole role) {
+        User newUser = new User(username, password, role, null);
+        userRepository.create(newUser);
     }
 
-    /**
-     * Generates the next user ID.
-     * @return
-     */
-    public int getNextId() {
-        return userRepository.getNextId();
-    }
 
     /**
      * Deletes the user with the specified ID.
@@ -75,7 +61,7 @@ public class UserService {
      * @param id the ID of the user to delete
      */
     public void deleteUser(int id) {
-        userRepository.deleteById(id);
+        userRepository.delete(id);
     }
 
 }

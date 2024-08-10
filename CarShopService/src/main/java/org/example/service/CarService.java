@@ -1,28 +1,19 @@
 package org.example.service;
-import org.example.model.Car;
-import org.example.model.User;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.example.model.*;
 import org.example.repository.CarRepository;
 import java.util.List;
 
 /**
  * Service for car management.
  */
+@AllArgsConstructor
+@Data
 public class CarService {
     private CarRepository carRepository;
     private AuditService auditService;
     private AuthService authService;
-
-    /**
-     * Constructs a new CarService.
-     *
-     * @param carRepository the car repository
-     * @param auditService  the audit service
-     */
-    public CarService(CarRepository carRepository, AuditService auditService, AuthService authService) {
-        this.carRepository = carRepository;
-        this.auditService = auditService;
-        this.authService = authService;
-    }
 
     /**
      * Gets all cars.
@@ -34,14 +25,18 @@ public class CarService {
     }
 
     /**
-     * Adds a new car.
-     *
-     * @param car the car to add
+     * Adds a new car
+     * @param brand
+     * @param model
+     * @param year
+     * @param price
+     * @param status
      */
-    public void addCar(Car car) {
+    public void addCar(String brand, String model, int year, double price, CarStatus status) {
         User user = authService.getCurrentUser();
-        carRepository.save(car);
-        auditService.logAction(user, "Added car: " + car.getBrand() + " " + car.getModel());
+        Car car = new Car(brand, model, year, price, status);
+        carRepository.create(car);
+        auditService.logAction(user, "Added car: " + car.getBrand() + " " + car.getModel()); // write log file
     }
 
     /**
@@ -59,22 +54,13 @@ public class CarService {
      * @param carId
      */
     public void deleteCar(int carId) {
-        carRepository.deleteById(carId);
+        User user = authService.getCurrentUser();
+        Car car = carRepository.findById(carId);
+        carRepository.delete(carId);
+        auditService.logAction(user, "Removed car: " + car.getBrand() + " " + car.getModel()); // write log file
     }
 
-    /**
-     * Get the car by ID.
-     *
-     * @param carId the car ID
-     */
     public Car getById(int carId) {
         return carRepository.findById(carId);
-    }
-
-    /**
-     * Generate next ID.
-     */
-    public int getNextId() {
-        return carRepository.getNextId();
     }
 }

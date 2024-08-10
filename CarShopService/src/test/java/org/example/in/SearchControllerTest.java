@@ -4,6 +4,7 @@ import org.example.model.AuditLog;
 import org.example.model.User;
 import org.example.model.UserRole;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.example.service.AuditService;
 import org.example.service.SearchService;
@@ -16,6 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
+@DisplayName("SearchController Tests")
 public class SearchControllerTest {
 
     private SearchController searchController;
@@ -23,14 +25,16 @@ public class SearchControllerTest {
     private SearchService searchService;
 
     @BeforeEach
+    @DisplayName("Set up SearchController and service mocks")
     void setUp() {
         auditService = mock(AuditService.class);
         searchController = new SearchController(searchService, auditService);
     }
 
     @Test
+    @DisplayName("Test exportLogs() - Should export audit logs to a file")
     void testExportLogs() throws IOException {
-        User user = new User(1, "admin", "password", UserRole.ADMIN);
+        User user = new User(1, "admin", "password", UserRole.ADMIN,null);
         AuditLog log1 = new AuditLog(1, user, "Action 1", null);
         AuditLog log2 = new AuditLog(2, user, "Action 2", null);
         List<AuditLog> logs = Arrays.asList(log1, log2);
@@ -41,7 +45,11 @@ public class SearchControllerTest {
         File file = new File("audit_logs.txt");
         assertThat(file.exists()).isTrue();
 
-        // Clean up
+        // Delete the test export log file if exists
+        deleteTestExportLogs(file);
+    }
+
+    private static void deleteTestExportLogs(File file) {
         if (file.exists()) {
             file.delete();
         }

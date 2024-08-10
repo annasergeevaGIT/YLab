@@ -42,8 +42,7 @@ public class CarController {
         scanner.nextLine(); // consume newline
         CarStatus status = CarStatus.AVAILABLE; // initial status is available
 
-        Car newCar = new Car(carService.getNextId(), brand, model, year, price, status);
-        carService.addCar(newCar);
+        carService.addCar(brand, model, year, price, status);
         System.out.println("Car is added successfully.");
     }
 
@@ -66,7 +65,7 @@ public class CarController {
             System.out.print("Input new price: ");
             double price = scanner.nextDouble();
             scanner.nextLine(); // consume newline
-            System.out.print("Input new status: ");
+            System.out.print("Input new status (AVAILABLE, RESERVED, SOLD): ");
             CarStatus status = CarStatus.valueOf(scanner.nextLine().toUpperCase());
 
             car.setBrand(brand);

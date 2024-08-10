@@ -2,14 +2,21 @@ package org.example.repository;
 
 import org.example.model.Order;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 /**
  * Repository for managing orders.
  */
 public class OrderRepository {
-    private List<Order> orders = new ArrayList<>();
-    private int nextId = 1;
+    private Map<Integer,Order> orders = new HashMap<>();
+
+    /**
+     * Saves an order to the repository.
+     *
+     * @param order the order to save
+     */
+    public void create(Order order) {
+        orders.put(order.getId(), order);
+    }
 
     /**
      * Returns a list of all orders.
@@ -17,20 +24,11 @@ public class OrderRepository {
      * @return the list of orders
      */
     public List<Order> findAll() {
-        return orders;
+        return new ArrayList<>(orders.values());
     }
 
     public Order findById(int id) {
-        return orders.stream().filter(order -> order.getId() == id).findFirst().orElse(null);
-    }
-    /**
-     * Saves an order to the repository.
-     *
-     * @param order the order to save
-     */
-    public void save(Order order) {
-        order.setId(nextId++);
-        orders.add(order);
+        return orders.get(id);
     }
 
     public void update(Order order) {
@@ -39,14 +37,8 @@ public class OrderRepository {
             existingOrder.setStatus(order.getStatus());
         }
     }
-
-    /**
-     * Gets the next order ID.
-     *
-     * @return the next order ID
-     */
-    public int getNextId() {
-        return nextId;
+    public void delete(int id) {
+        orders.remove(id);
     }
 }
 

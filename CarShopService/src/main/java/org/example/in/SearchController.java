@@ -48,7 +48,7 @@ public class SearchController {
         if (!priceStr.isEmpty()) {
             price = Double.parseDouble(priceStr);
         }
-        System.out.print("Input car status (or leave empty): ");
+        System.out.print("Input car status (AVAILABLE, RESERVED, SOLD or leave empty): ");
         String status = scanner.nextLine();
 
         List<Car> cars = searchService.searchCars(brand.isEmpty() ? null : brand, model.isEmpty() ? null : model,
@@ -86,40 +86,68 @@ public class SearchController {
         List<Order> orders = searchService.searchOrders(customerId, status, carId);
 
         for (Order order : orders) {
-            System.out.println(order.getId() + ", Car: " + order.getCar().getBrand() + " " + order.getCar().getModel() +
-                    ", User: " + order.getUser().getUsername() + ", Status: " + order.getStatus());
+            System.out.printf("Order ID: %d, Car: %s %s, User: %s, Status: %s\n",
+                    order.getId(),
+                    order.getCar().getBrand(),
+                    order.getCar().getModel(),
+                    order.getUser().getUsername(),
+                    order.getStatus());
         }
     }
 
     /**
-     * Managing user input to filter user by role.
+     * Managing user input to search cars by different parameters.
      */
-    public void filterUsersByRole() {
+    public void searchUsers() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Choose user role (CUSTOMER, USER, ADMIN) or leave empty: ");
+        System.out.print("Input user Id (or leave empty): ");
+        Integer userId = null;
+        String userIdStr = scanner.nextLine();
+        if (!userIdStr.isEmpty()) {
+            userId = Integer.parseInt(userIdStr);
+        }
+
+        System.out.print("Input user name (or leave empty): ");
+        String username = scanner.nextLine();
+
+        System.out.print("Input user role (ADMIN, MANAGER, CUSTOMER or leave empty): ");
         String role = scanner.nextLine();
 
-        List<User> users = searchService.filterUsersByRole(role.isEmpty() ? null : role);
+        System.out.print("Input amount of completed orders (or leave empty): ");
+        Integer orderCount = null;
+        String orderStr = scanner.nextLine();
+        if (!orderStr.isEmpty()) {
+            orderCount = Integer.parseInt(orderStr);
+        }
+
+        List<User> users = searchService.searchUsers(userId, username.isEmpty() ? null : username,
+                role.isEmpty() ? null : UserRole.valueOf(role), orderCount);
 
         for (User user : users) {
-            System.out.println(user);
-        }
-    }
+            System.out.printf("User ID: %d, Username: %s, Status %s\n",
+                    user.getId(),
+                    user.getUsername(),
+                    user.getRole());
 
-    /**
-     * Managing user input to filter user by purchase count.
-     */
-    public int sortUsersByPurchases() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Choose car mark (or leave empty): ");
-        int userId = scanner.nextInt();
-        return searchService.getPurchaseCount(userId);
+            List<Order> orders = user.getOrders();
+            if (orders == null || orders.isEmpty()) {
+                System.out.println("  No orders found.");
+            } else {
+                System.out.println("  Orders:");
+                for (Order order : orders) {
+                    System.out.printf("    Order ID: %d, Status: %s, Car: %s\n",
+                            order.getId(),
+                            order.getStatus(),
+                            order.getCar() != null ? order.getCar().toString() : "No car details");
+                }
+            }
+        }
     }
 
     /**
      * Managing user input to filter audit logs.
      */
-    public void filterAuditLogs() {
+    public void searchAuditLogs() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Enter start date (yyyy-MM-dd HH:mm:ss) or press Enter to skip:");

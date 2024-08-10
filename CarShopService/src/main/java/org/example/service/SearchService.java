@@ -72,20 +72,13 @@ public class SearchService {
      * @param role user role (ADMIN, MANAGER, CUSTOMER)
      * @return the list of users found
      */
-    public List<User> filterUsersByRole(String role) {
+    public List<User> searchUsers(Integer userId, String username, UserRole role, Integer orderCount) {
         return userRepository.findAll().stream()
-                .filter(user -> role == null || user.getRole().toString().equalsIgnoreCase(role))
+                .filter(user -> (userId == null || user.getId() == userId) &&
+                        (username == null || user.getUsername().equalsIgnoreCase(username)) &&
+                        (role == null || user.getRole() == role) &&
+                        (orderCount == null || user.getOrders().size() == orderCount))
                 .collect(Collectors.toList());
-    }
-
-    /**
-     * Search user by username
-     *
-     * @param username name of the user
-     * @return the user found
-     */
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
     }
 
     /**
@@ -116,5 +109,9 @@ public class SearchService {
                         (user == null || log.getUser().equals(user)) &&
                         (action == null || log.getAction().equalsIgnoreCase(action)))
                 .collect(Collectors.toList());
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }
