@@ -16,22 +16,22 @@ A simple console application for managing a car dealership. Supports user regist
 3. Compile the project: `mvn compile`
 4. Run the project: `java -cp .\target\classes org.example.Main`
 
-## Пример использования:
+## Example Usage:
 
-Регистрация и авторизация пользователей:
+User Registration and Authorization:
 
-Пользователь с ролью ADMIN с логином "root" и паролем "root" создается автоматически при запуске приложения .
+A user with the ADMIN role, login "root," and password "root" is automatically created when the application starts.
 
-Авторизация пользователей:
-Пользователь может войти в систему с использованием имени пользователя и пароля, автоматически присвоена роль CUSTOMER, которую может изменить ADMIN.
+User Authorization:
+A user can log in using a username and password. The CUSTOMER role is automatically assigned, but it can be changed by the ADMIN.
 
-Управление автомобилями и заказами:
-ADMIN и MANAGER могут просматривать, добавлять, редактировать и удалять автомобили.
-ADMIN и MANAGER могут управлять заказами.
-CUSTOMER может просматривать доступные автомобили и создавать заказы.
+Car and Order Management:
+ADMIN and MANAGER can view, add, edit, and delete cars.
+ADMIN and MANAGER can manage orders.
+CUSTOMER can view available cars and create orders.
 
-Экспорт журналов аудита:
-ADMIN может экспортировать журналы аудита в файл.
+Exporting Audit Logs:
+ADMIN can export audit logs to a file.
 
 # Features
 User registration and authentication (admin, manager, customer).
@@ -41,123 +41,6 @@ View and manage orders (search, change status, cancel).
 User action logging.
 
 # Requirements
-Java 17
-Maven (for dependency management and project build)
+Java 17,
+Maven (for dependency management and project build),
 JUnit5 (for testing)
-
-# Project Structure
-CarShopService/
-│	└──	src/
-│		├──	main/
-│		│	└──java/
-│		│		├── in/
-│		│		│   ├── AuthController.java
-│		│		│   ├── CarController.java
-│		│		│   ├── OrderController.java
-│		│		│   ├── SearchController.java
-│		│		│   └── UserController.java
-│		│		├── model/
-│		│		│	├── AuditLog.java
-│		│		│   ├── Car.java
-│		│		│	├── CarStatus.java
-│		│		│   ├── Order.java
-│		│		│	├── OrderStatus.java
-│		│		│   ├── User.java
-│		│		│   └── UserRole.java
-│		│		├── repository/
-│		│		│   ├── AuditRepository.java
-│		│		│   ├── CarRepository.java
-│		│		│   ├── OrderRepository.java
-│		│		│   └── UserRepository.java
-│		│		├── service/
-│		│		│   ├── AuditService.java
-│		│		│   ├── AuthService.java
-│		│		│   ├── CarService.java
-│		│	    │	├── OrderService.java
-│		│		│   ├── SearchService.java
-│		│		│   └── UserService.java
-│		│		└── main/			
-│		│			└── Main.java
-│		└──	test/
-│			└──java/
-│				└── service/
-│					├── AuditServiceTest.java
-│					├── AuthServiceTest.java
-│					├── CarServiceTest.java
-│					├── OrderServiceTest.java
-│					├── SearchServiceTest.java
-│					└── UserServiceTest.java
-├── pom.xml
-└── README.md
-
-
-# Classes and Methods
-
-  "projectClassification": {
-    "searchMode": "OpenProject", // OpenProject, AllProjects
-    "includedProjects": "",
-    "pathEndKeywords": "*.impl",
-    "isClientPath": "",
-    "isClientName": "",
-    "isTestPath": "",
-    "isTestName": "",
-    "isMappingPath": "",
-    "isMappingName": "",
-    "isDataAccessPath": "",
-    "isDataAccessName": "",
-    "isDataStructurePath": "",
-    "isDataStructureName": "",
-    "isInterfaceStructuresPath": "",
-    "isInterfaceStructuresName": "",
-    "isEntryPointPath": "",
-    "isEntryPointName": "",
-    "treatFinalFieldsAsMandatory": false
-  },
-  "graphRestriction": {
-    "classPackageExcludeFilter": "",
-    "classPackageIncludeFilter": "",
-    "classNameExcludeFilter": "",
-    "classNameIncludeFilter": "",
-    "methodNameExcludeFilter": "",
-    "methodNameIncludeFilter": "",
-    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
-    "removeByAnnotation": "",
-    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
-    "removeByClassName": "",
-    "cutMappings": false,
-    "cutEnum": true,
-    "cutTests": true,
-    "cutClient": true,
-    "cutDataAccess": true,
-    "cutInterfaceStructures": true,
-    "cutDataStructures": true,
-    "cutGetterAndSetter": true,
-    "cutConstructors": true
-  },
-  "graphTraversal": {
-    "forwardDepth": 3,
-    "backwardDepth": 3,
-    "classPackageExcludeFilter": "",
-    "classPackageIncludeFilter": "",
-    "classNameExcludeFilter": "",
-    "classNameIncludeFilter": "",
-    "methodNameExcludeFilter": "",
-    "methodNameIncludeFilter": "",
-    "hideMappings": false,
-    "hideDataStructures": false,
-    "hidePrivateMethods": true,
-    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
-    "onlyShowApplicationEntryPoints": false, // root node is included
-    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
-  },
-  "details": {
-    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
-    "showClassGenericTypes": true,
-    "showMethods": true,
-    "showMethodParameterNames": true,
-    "showMethodParameterTypes": true,
-    "showMethodReturnType": true,
-    "showPackageLevels": 2,
-    "showDetailedClassStructure": true
-  },
-  "rootClass": "main.Main",
