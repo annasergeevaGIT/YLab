@@ -13,8 +13,10 @@ A simple console application for managing a car dealership. Supports user regist
 ## Build and Run
 1. Clone the repository.
 2. Navigate to the project directory.
-3. Compile the project: `mvn compile`
-4. Run the project: `java -cp .\target\classes org.example.Main`
+3. Build the Docker Image: `docker-compose up --build`
+4. Compile the project: `mvn compile`
+5. Run the project: `java -cp .\target\classes org.example.Main`
+
 
 ## Example Usage:
 
@@ -44,3 +46,4 @@ User action logging.
 Java 17,
 Maven (for dependency management and project build),
 JUnit5 (for testing)
+Docker

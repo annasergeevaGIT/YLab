@@ -1,67 +1,166 @@
 package org.example.repository;
 
-import java.util.ArrayList;
 import org.example.model.User;
-import java.util.*;
-/**
- * Repository to store users.
- */
+import org.example.model.UserRole;
+import org.example.util.IDGenerator;
+import java.io.IOException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserRepository {
-    private  Map<Integer, User> users = new HashMap<>();
-    /**
-     * Adding a new user to the repo.
-     * @param user to add
-     */
-    public void create(User user) {
-        users.put(user.getId(), user);
-    }
+    private Connection connection;
+    private static final String SEQUENCE_NAME = "entity_schema.users_id_seq";
 
-    /**
-     * Find all users in the repo
-     * @return array list containing users
-     */
-    public List<User> findAll() {
-        return new ArrayList<>(users.values());
-    }
-
-    /**
-     * Find user by ID
-     * @param id
-     * @return the user found, else null
-     */
-    public User findById(int id) {
-        return users.values().stream()
-                .filter(user -> user.getId() == id)
-                .findFirst().orElse(null);
-    }
-
-    /**
-     * Find user by username.
-     * @param username
-     * @return the user found, else null
-     */
-    public User findByUsername(String username) {
-        return users.values().stream()
-                .filter(user -> user.getUsername().equals(username))
-                .findFirst().orElse(null);
-    }
-
-    /**
-     * Update the existing user.
-     * @param user to update
-     */
-    public void update(User user) {
-        if (users.containsKey(user.getId())) {
-            users.put(user.getId(), user);
+    public UserRepository() {
+        try {
+            this.connection = DatabaseConnection.getConnection();
+        } catch (SQLException | IOException e) {
+            throw new RuntimeException("Connection error: " + e.getMessage(), e);
         }
     }
 
     /**
-     * Delete user by ID.
-     * @param id user ID
-     * @return true if deleted
+     * Adding a new user to the repository and the PostgreSQL database.
+     *
+     * @param user the user to add
+     */
+    public void create(User user) {
+        int newId = IDGenerator.getNextId(SEQUENCE_NAME);
+        user.setId(newId);
+
+        String sql = "INSERT INTO entity_schema.users (id, username, password, role) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, user.getId());
+            stmt.setString(2, user.getUsername());
+            stmt.setString(3, user.getPassword());
+            stmt.setString(4, user.getRole().toString());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error saving user to database: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Retrieve all users from the PostgreSQL database.
+     *
+     * @return a list containing all users
+     */
+    public List<User> findAll() {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT * FROM entity_schema.users";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(UserRole.valueOf(rs.getString("role")));
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving users from database: " + e.getMessage(), e);
+        }
+
+        return users;
+    }
+
+    /**
+     * Find a user by their ID in the PostgreSQL database.
+     *
+     * @param id the ID of the user to find
+     * @return the user if found, otherwise null
+     */
+    public User findById(int id) {
+        User user = null;
+        String sql = "SELECT * FROM entity_schema.users WHERE id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setUsername(rs.getString("username"));
+                    user.setPassword(rs.getString("password"));
+                    user.setRole(UserRole.valueOf(rs.getString("role")));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving user from database: " + e.getMessage(), e);
+        }
+
+        return user;
+    }
+
+    /**
+     * Find a user by their username in the PostgreSQL database.
+     *
+     * @param username the username of the user to find
+     * @return the user if found, otherwise null
+     */
+    public User findByUsername(String username) {
+        User user = null;
+        String sql = "SELECT * FROM entity_schema.users WHERE username = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, username);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setUsername(rs.getString("username"));
+                    user.setPassword(rs.getString("password"));
+                    user.setRole(UserRole.valueOf(rs.getString("role")));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving user from database: " + e.getMessage(), e);
+        }
+
+        return user;
+    }
+
+    /**
+     * Update the existing user in the PostgreSQL database.
+     *
+     * @param user the user to update
+     */
+    public void update(User user) {
+        String sql = "UPDATE entity_schema.users SET username = ?, password = ?, role = ? WHERE id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, user.getPassword());
+            stmt.setString(3, user.getRole().toString());
+            stmt.setInt(4, user.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating user in database: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Delete a user by their ID from the PostgreSQL database.
+     *
+     * @param id the ID of the user to delete
+     * @return true if the user was deleted, otherwise false
      */
     public boolean delete(int id) {
-        return users.remove(id) != null;
+        String sql = "DELETE FROM entity_schema.users WHERE id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting user from database: " + e.getMessage(), e);
+        }
     }
 }

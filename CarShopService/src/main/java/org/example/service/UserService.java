@@ -47,7 +47,7 @@ public class UserService {
 
     /**
      * Adding a user in the user repository.
-     * @param user the user to add
+     *
      */
     public void addUser(String username, String password, UserRole role) {
         User newUser = new User(username, password, role, null);

@@ -3,6 +3,7 @@ package org.example.in;
 import org.example.model.AuditLog;
 import org.example.model.User;
 import org.example.model.UserRole;
+import org.example.service.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,12 +24,13 @@ public class SearchControllerTest {
     private SearchController searchController;
     private AuditService auditService;
     private SearchService searchService;
+    private AuthService authService;
 
     @BeforeEach
     @DisplayName("Set up SearchController and service mocks")
     void setUp() {
         auditService = mock(AuditService.class);
-        searchController = new SearchController(searchService, auditService);
+        searchController = new SearchController(searchService, auditService, authService);
     }
 
     @Test

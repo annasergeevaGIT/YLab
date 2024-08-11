@@ -1,5 +1,7 @@
 package org.example.service;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.example.model.AuditLog;
 import org.example.model.User;
 import org.example.repository.AuditRepository;
@@ -11,19 +13,10 @@ import java.util.stream.Collectors;
 /**
  * Service for managing audit logs.
  */
+@AllArgsConstructor
+@Data
 public class AuditService {
     private AuditRepository auditRepository;
-
-
-    /**
-     * Constructs an AuditService.
-     *
-     * @param auditRepository the repository for audit logs
-     */
-    public AuditService(AuditRepository auditRepository) {
-        this.auditRepository = auditRepository;
-
-    }
 
     /**
      * Logs an action performed by a user.
@@ -32,27 +25,11 @@ public class AuditService {
      * @param action the action performed by the user
      */
     public void logAction(User user, String action) {
-        AuditLog log = new AuditLog( user, action, LocalDateTime.now());
+        AuditLog log = new AuditLog();
+        log.setAction(action);
+        log.setUser(user);
+        log.setTimestamp(LocalDateTime.now());
         auditRepository.create(log);
-    }
-
-    /**
-     * Returns a list of audit log entries filtered by date, user, and action type.
-     *
-     * @param startDate the start date for filtering
-     * @param endDate   the end date for filtering
-     * @param user      the user to filter by (can be null)
-     * @param action    the action type to filter by (can be null)
-     * @return the list of filtered audit log entries
-     */
-
-    public List<AuditLog> filterLogs(LocalDateTime startDate, LocalDateTime endDate, User user, String action) {
-        return auditRepository.findAll().stream()
-                .filter(log -> (startDate == null || !log.getTimestamp().isBefore(startDate)) &&
-                        (endDate == null || !log.getTimestamp().isAfter(endDate)) &&
-                        (user == null || log.getUser().equals(user)) &&
-                        (action == null || log.getAction().equals(action)))
-                .collect(Collectors.toList());
     }
 
     /**

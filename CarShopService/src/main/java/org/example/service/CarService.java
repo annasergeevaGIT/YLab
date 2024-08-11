@@ -41,10 +41,14 @@ public class CarService {
 
     /**
      * Update existing car.
-     *
-     * @param car the car to update
+     * @param brand
+     * @param model
+     * @param year
+     * @param price
+     * @param status
      */
-    public void updateCar(Car car) {
+    public void updateCar(String brand,String model, int year, double price, CarStatus status) {
+        Car car = new Car(brand, model, year, price, status);
         carRepository.update(car);
     }
 

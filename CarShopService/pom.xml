@@ -14,6 +14,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>17</java.version>
     <junit-jupiter-api.version>5.10.3</junit-jupiter-api.version>
+    <junit-jupiter-engine.version>5.11.0-RC1</junit-jupiter-engine.version>
+    <testcontainers.version>1.20.1</testcontainers.version>
     <mockito-core.version>5.12.0</mockito-core.version>
     <assertj-core.version>3.26.3</assertj-core.version>
     <lombok.version>1.18.34</lombok.version>
@@ -21,6 +23,8 @@
     <slf4j-api.version>2.0.13</slf4j-api.version>
     <postgresql.version>42.7.3</postgresql.version>
     <liquibase-core.version>4.29.1</liquibase-core.version>
+
+    <junit-jupiter.version>1.20.1</junit-jupiter.version>
   </properties>
 
   <dependencies>
@@ -30,6 +34,13 @@
       <artifactId>junit-jupiter-api</artifactId>
       <version>${junit-jupiter-api.version}</version>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-engine</artifactId>
+    <version>${junit-jupiter-engine.version}</version>
+    <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -43,6 +54,20 @@
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
       <version>${assertj-core.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${testcontainers.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit-jupiter.version}</version>
       <scope>test</scope>
     </dependency>
 

@@ -68,13 +68,7 @@ public class CarController {
             System.out.print("Input new status (AVAILABLE, RESERVED, SOLD): ");
             CarStatus status = CarStatus.valueOf(scanner.nextLine().toUpperCase());
 
-            car.setBrand(brand);
-            car.setModel(model);
-            car.setYear(year);
-            car.setPrice(price);
-            car.setStatus(status);
-
-            carService.updateCar(car);
+            carService.updateCar(brand, model, year, price, status);
             System.out.println("Car info successfully updated.");
         } else {
             System.out.println("The car is not found.");
