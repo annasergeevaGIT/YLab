@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.example</groupId>
@@ -23,12 +23,11 @@
     <slf4j-api.version>2.0.13</slf4j-api.version>
     <postgresql.version>42.7.3</postgresql.version>
     <liquibase-core.version>4.29.1</liquibase-core.version>
-
     <junit-jupiter.version>1.20.1</junit-jupiter.version>
   </properties>
 
   <dependencies>
-    <!--test-->
+    <!-- Testing dependencies -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
@@ -37,10 +36,10 @@
     </dependency>
 
     <dependency>
-    <groupId>org.junit.jupiter</groupId>
-    <artifactId>junit-jupiter-engine</artifactId>
-    <version>${junit-jupiter-engine.version}</version>
-    <scope>test</scope>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${junit-jupiter-engine.version}</version>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -71,7 +70,7 @@
       <scope>test</scope>
     </dependency>
 
-    <!--lombok-->
+    <!-- Lombok -->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
@@ -79,7 +78,7 @@
       <scope>provided</scope>
     </dependency>
 
-    <!--logging-->
+    <!-- Logging dependencies -->
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
@@ -93,19 +92,50 @@
       <version>${slf4j-api.version}</version>
     </dependency>
 
-    <!--jdbc-->
+    <!-- JDBC and PostgreSQL -->
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <version>${postgresql.version}</version>
     </dependency>
 
+    <!-- Liquibase -->
     <dependency>
       <groupId>org.liquibase</groupId>
       <artifactId>liquibase-core</artifactId>
       <version>${liquibase-core.version}</version>
     </dependency>
-
-
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-core</artifactId>
+        <version>${liquibase-core.version}</version>
+        <configuration>
+          <propertyFile>src/main/resources/config/config.properties</propertyFile>
+          <liquibase.changelog.path>src/main/resources/db/changelog/changelog.xml</liquibase.changelog.path>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>update</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/*.properties</include>
+          <include>**/*.xml</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
 </project>
