@@ -37,6 +37,6 @@ volumes:
       # docker rm $(docker ps -a -q)
       # docker ps -a
       # docker container ls
-      # docker inspect bbaab397bcca
+      # docker inspect #######
       # docker-compose down
       # docker-compose up --build
