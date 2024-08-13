@@ -25,6 +25,13 @@ public class LiquibaseUpdater {
         try {
             try (Connection connection = DatabaseConnection.getConnection()) {
                 Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
+
+                // Set the schema for Liquibase
+                String schemaName = properties.getProperty("liquibase.schemaName");
+                if (schemaName != null) {
+                    database.setDefaultSchemaName(schemaName);
+                }
+
                 Liquibase liquibase = new Liquibase(getChangelogPath(), new ClassLoaderResourceAccessor(), database);
                 liquibase.clearCheckSums();
                 liquibase.update();

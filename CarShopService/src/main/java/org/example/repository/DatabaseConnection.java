@@ -41,14 +41,19 @@ public class DatabaseConnection {
         return USER != null ? USER : properties.getProperty("database.username");
     }
 
-   private static String password() {
+    private static String password() {
         return PASS != null ? PASS : properties.getProperty("database.password");
    }
+
+    private static String schema() {
+        return PASS != null ? PASS : properties.getProperty("database.schema");
+    }
 
     public static Connection getConnection() throws SQLException, IOException {
         try{
             loadConfigProperties();
             Connection con = DriverManager.getConnection(url(), user(), password());
+            con.createStatement().execute("SET search_path TO " + schema());
             return con;
         } catch (Exception e) {
             System.out.println("Error connecting to the database: " + e);

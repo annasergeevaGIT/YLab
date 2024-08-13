@@ -1,8 +1,7 @@
--- Create custom schema for entity tables
+-- Create schemas
+CREATE SCHEMA IF NOT EXISTS service_schema;
 CREATE SCHEMA IF NOT EXISTS entity_schema;
 
--- Create service schema for service/system tables
-CREATE SCHEMA IF NOT EXISTS service_schema;
-
--- Optionally, set search paths
-ALTER ROLE root SET search_path TO entity_schema, service_schema, public;
+-- Grant permissions (if needed)
+GRANT USAGE ON SCHEMA service_schema TO root;
+GRANT USAGE ON SCHEMA entity_schema TO root;

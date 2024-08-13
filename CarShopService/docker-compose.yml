@@ -12,7 +12,7 @@ services:
       - "5431:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
-      #- init.sql:/docker-entrypoint-initdb.d # Mounting SQL initialization scripts
+      - ./init.sql:/docker-entrypoint-initdb.d/init-schema.sql # Mounting SQL initialization scripts
 
   pgadmin:
     container_name: pgadmin4_container
