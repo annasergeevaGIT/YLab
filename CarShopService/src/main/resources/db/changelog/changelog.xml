@@ -10,16 +10,5 @@
     <include file="003-add-fk-constraint.xml" relativeToChangelogFile="true"/>
     <include file="004-insert-data.xml" relativeToChangelogFile="true"/>
 
-    <changeSet id="005" author="anna">
-        <sql>
-            CREATE SCHEMA IF NOT EXISTS entity_schema;
-        </sql>
-    </changeSet>
-
-    <changeSet id="006" author="anna">
-        <sql>
-            CREATE SCHEMA IF NOT EXISTS service_schema;
-        </sql>
-    </changeSet>
 
 </databaseChangeLog>

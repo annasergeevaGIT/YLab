@@ -21,11 +21,6 @@ public class LiquibaseUpdater {
     private static final LiquibaseUpdater INSTANCE = new LiquibaseUpdater();
     private static Properties properties;
 
-    /**
-     * Constructor of {@link LiquibaseUpdater}.
-     *
-     * @return an instance of {@link LiquibaseUpdater}.
-     */
     public LiquibaseUpdater() {
         try {
             try (Connection connection = DatabaseConnection.getConnection()) {
@@ -33,7 +28,7 @@ public class LiquibaseUpdater {
                 Liquibase liquibase = new Liquibase(getChangelogPath(), new ClassLoaderResourceAccessor(), database);
                 liquibase.clearCheckSums();
                 liquibase.update();
-                System.out.println("Successfully updated liquibase.Migration is successful");
+                System.out.println("Successfully updated liquibase. Migration is successful");
             } catch (SQLException | LiquibaseException exception) {
                 log.error(exception.getMessage());
                 System.out.println("SQL got exception " + exception);
@@ -44,24 +39,20 @@ public class LiquibaseUpdater {
         }
     }
 
-    private String getChangelogPath(){
-        if(properties ==null){
-            properties =new Properties();
-            try (InputStream is = new FileInputStream(DatabaseConnection.getCONFIG_FILE())){
+    private String getChangelogPath() {
+        if (properties == null) {
+            properties = new Properties();
+            try (InputStream is = new FileInputStream(DatabaseConnection.getCONFIG_FILE())) {
                 properties.load(is);
             } catch (IOException e) {
                 log.error(e.getMessage());
                 System.out.println("Error loading properties file: " + e);
             }
         }
-        return properties.getProperty("Successfully loaded changelog");
+        return properties.getProperty("liquibase.changelog.path");
     }
 
     public static LiquibaseUpdater getInstance() {
         return INSTANCE;
     }
-
-
-
 }
-
