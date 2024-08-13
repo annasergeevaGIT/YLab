@@ -5,10 +5,26 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <include file="001-create-sequences.xml" relativeToChangelogFile="true"/>
-    <include file="002-create-table.xml" relativeToChangelogFile="true"/>
-    <include file="003-add-fk-constraint.xml" relativeToChangelogFile="true"/>
-    <include file="004-insert-data.xml" relativeToChangelogFile="true"/>
+<changeSet id="v1" author="anna">
+    <sql>
+        CREATE SCHEMA IF NOT EXISTS entity_schema;
+        GRANT USAGE ON SCHEMA entity_schema TO root;
 
+        CREATE SCHEMA IF NOT EXISTS service_schema;
+        GRANT USAGE ON SCHEMA service_schema TO root;
+
+    </sql>
+</changeSet>
+
+<include file="v1/create-user-table.xml" relativeToChangelogFile="true"/>
+<include file="v1/create-car-table.xml" relativeToChangelogFile="true"/>
+<include file="v1/create-order-table.xml" relativeToChangelogFile="true"/>
+<include file="v1/create-log-table.xml" relativeToChangelogFile="true"/>
+
+
+<include file="v1/insert-car-data.xml" relativeToChangelogFile="true"/>
+<include file="v1/insert-user-data.xml" relativeToChangelogFile="true"/>
+<include file="v1/insert-order-data.xml" relativeToChangelogFile="true"/>
+<include file="v1/insert-log-data.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Add cars -->
+    <changeSet id="insertcar-v1" author="anna">
+        <loadData
+                file="db/changelog/data/cars.csv"
+                tableName="cars"
+                schemaName="entity_schema"
+                separator=",">
+            <column name="brand" type="string"/>
+            <column name="model" type="string"/>
+            <column name="year" type="int"/>
+            <column name="price" type="double"/>
+            <column name="status" type="string"/>
+        </loadData>
+    </changeSet>
+
+</databaseChangeLog>
