@@ -5,12 +5,17 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
+    <!-- Create order_id_seq sequence -->
+    <changeSet id="order-id-seq-v1" author="anna">
+        <createSequence sequenceName="entity_schema.order_id_seq"
+                        startValue="1"/>
+    </changeSet>
 
     <!-- Create orders -->
     <changeSet id="orders-v1" author="anna">
 
         <createTable tableName="orders" schemaName="entity_schema">
-            <column name="id" type="INTEGER">
+            <column name="id" type="INTEGER" defaultValueSequenceNext="entity_schema.order_id_seq">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="car_id" type="INTEGER">

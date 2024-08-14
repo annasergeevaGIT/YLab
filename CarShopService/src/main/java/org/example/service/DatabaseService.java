@@ -1,4 +1,4 @@
-package org.example.repository;
+package org.example.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,17 +15,36 @@ import java.io.IOException;
 @AllArgsConstructor
 @Data
 @Slf4j
-public class DatabaseConnection {
+public class DatabaseService {
+
+    private static Connection connection;
+
     private static Properties properties;
     private static String URL, USER, PASS;
     @Getter
     private static final String CONFIG_FILE = "src/main/resources/config/config.properties"; //
+
+    public Connection initConnection() throws SQLException, IOException {
+        try{
+            loadConfigProperties();
+            Connection con = DriverManager.getConnection(url(), user(), password());
+            con.createStatement().execute("SET search_path TO " + schema());
+            System.out.println("Conection to the database established");
+            connection = con;
+        } catch (Exception e) {
+            System.out.println("Error connecting to the database: " + e);
+            log.error(e.getMessage());
+            throw e;
+        }
+        return connection;
+    }
 
     private static void loadConfigProperties() throws IOException {
         if (properties == null) {
             properties = new Properties();
             try (InputStream is = new FileInputStream(CONFIG_FILE)) {
                 properties.load(is);
+                System.out.println("Config file loaded");
                 System.out.println(" url: "+ url() +" user: " +  user() + " pw: " +  password());
             } catch (IOException e) {
                 System.out.println("Error loading config file: " + CONFIG_FILE);
@@ -49,21 +68,17 @@ public class DatabaseConnection {
         return PASS != null ? PASS : properties.getProperty("database.schema");
     }
 
-    public static Connection getConnection() throws SQLException, IOException {
-        try{
-            loadConfigProperties();
-            Connection con = DriverManager.getConnection(url(), user(), password());
-            con.createStatement().execute("SET search_path TO " + schema());
-            return con;
-        } catch (Exception e) {
-            System.out.println("Error connecting to the database: " + e);
-            log.error(e.getMessage());
-            throw e;
-        }
+
+
+    public static Connection getConnection() {
+        return connection;
     }
+
     public static void setConnection(String url, String user, String password) {
-        DatabaseConnection.URL = url;
-        DatabaseConnection.USER = user;
-        DatabaseConnection.PASS = password;
+        DatabaseService.URL = url;
+        DatabaseService.USER = user;
+        DatabaseService.PASS = password;
     }
+
+
 }

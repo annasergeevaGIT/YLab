@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @Data
 public class AuditLog {
     private int id;
-    private static int idCounter = 1;
     private User user;
     private String action;
     private LocalDateTime timestamp;
@@ -27,8 +26,6 @@ public class AuditLog {
      * @param timestamp the time the action was performed
      */
     public AuditLog(User user, String action, LocalDateTime timestamp) {
-        this.id = idCounter;
-        this.idCounter++;
         this.user = user;
         this.action = action;
         this.timestamp = timestamp;

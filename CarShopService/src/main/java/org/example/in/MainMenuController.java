@@ -1,6 +1,7 @@
 package org.example.in;
 
 import org.example.command.*;
+import org.example.config.LiquibaseUpdater;
 import org.example.model.User;
 import org.example.model.UserRole;
 import org.example.repository.*;

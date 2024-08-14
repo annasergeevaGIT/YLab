@@ -1,10 +1,8 @@
 package org.example.repository;
 
-import liquibase.Liquibase;
-import liquibase.database.jvm.JdbcConnection;
-import liquibase.exception.LiquibaseException;
-import liquibase.resource.ClassLoaderResourceAccessor;
 import lombok.var;
+import org.example.service.DatabaseService;
+import org.example.config.LiquibaseUpdater;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -38,7 +36,7 @@ public class LiquibaseUpdaterTest {
                 postgresContainer.getUsername(),
                 postgresContainer.getPassword()
         );
-        DatabaseConnection.setConnection(
+        DatabaseService.setConnection(
                 postgresContainer.getJdbcUrl(),
                 postgresContainer.getUsername(),
                 postgresContainer.getPassword()

@@ -5,11 +5,17 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <!-- Create logs-->
-    <changeSet id="logs-v1" author="anna">
+    <!-- Create audit_logs_id_seq sequence -->
+    <changeSet id="log-id-seq-v1" author="anna">
+        <createSequence sequenceName="entity_schema.audit_log_id_seq"
+                        startValue="1"/>
+    </changeSet>
 
-        <createTable tableName="audit_log" schemaName="entity_schema">
-            <column name="id" type="INTEGER">
+    <!-- Create audit_log table -->
+    <changeSet id="log-v1" author="anna">
+
+        <createTable tableName="audit_logs" schemaName="entity_schema">
+            <column name="id" type="INTEGER" defaultValueSequenceNext="entity_schema.audit_logs_id_seq">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_id" type="INTEGER">
@@ -22,6 +28,7 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
         <addForeignKeyConstraint baseTableName="audit_log"
                                  baseColumnNames="user_id"
                                  constraintName="fk_audit_log_user"

@@ -1,4 +1,4 @@
-package org.example.repository;
+package org.example.config;
 
 import liquibase.Liquibase;
 import liquibase.database.jvm.JdbcConnection;
@@ -10,6 +10,7 @@ import java.sql.Connection;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.example.service.DatabaseService;
 
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -23,7 +24,7 @@ public class LiquibaseUpdater {
 
     public LiquibaseUpdater() {
         try {
-            try (Connection connection = DatabaseConnection.getConnection()) {
+            try (Connection connection = DatabaseService.getConnection()) {
                 Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
 
                 // Set the schema for Liquibase
@@ -36,20 +37,18 @@ public class LiquibaseUpdater {
                 liquibase.clearCheckSums();
                 liquibase.update();
                 System.out.println("Successfully updated liquibase. Migration is successful");
-            } catch (SQLException | LiquibaseException exception) {
-                log.error(exception.getMessage());
-                System.out.println("SQL got exception " + exception);
+            } catch (SQLException | LiquibaseException e) {
+                log.error(e.getMessage());
             }
         } catch (Exception e) {
             log.error(e.getMessage());
-            System.out.println("Error loading properties file: " + e);
         }
     }
 
     private String getChangelogPath() {
         if (properties == null) {
             properties = new Properties();
-            try (InputStream is = new FileInputStream(DatabaseConnection.getCONFIG_FILE())) {
+            try (InputStream is = new FileInputStream(DatabaseService.getCONFIG_FILE())) {
                 properties.load(is);
             } catch (IOException e) {
                 log.error(e.getMessage());

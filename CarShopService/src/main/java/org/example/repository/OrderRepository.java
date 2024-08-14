@@ -1,21 +1,19 @@
 package org.example.repository;
 
+import org.example.service.DatabaseService;
 import org.example.model.Order;
 import org.example.model.OrderStatus;
-import org.example.util.IDGenerator;
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderRepository {
     private Connection connection;
-    private static final String SEQUENCE_NAME = "entity_schema.orders_id_seq";
 
     public OrderRepository() {
         try {
-            this.connection = DatabaseConnection.getConnection();
-        } catch (SQLException | IOException e) {
+            this.connection = DatabaseService.getConnection();
+        } catch (Exception e) {
             throw new RuntimeException("Connection error: " + e.getMessage());
         }
     }
@@ -26,17 +24,23 @@ public class OrderRepository {
      * @param order the order to save
      */
     public void create(Order order) {
-        int newId = IDGenerator.getNextId(SEQUENCE_NAME);
-        order.setId(newId);
 
-        String sql = "INSERT INTO entity_schema.orders (id, user_id, status, created_at) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO entity_schema.orders (user_id, car_id, order_status, created_at) VALUES (?, ?, ?, ?)";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, order.getId());
-            stmt.setInt(2, order.getUser().getId());
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, order.getUser().getId());
+            stmt.setInt(2, order.getCar().getId());
             stmt.setString(3, order.getStatus().toString());
             stmt.setTimestamp(4, Timestamp.valueOf(order.getCreatedAt()));
             stmt.executeUpdate();
+
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    order.setId(generatedKeys.getInt(1));
+                } else {
+                    throw new SQLException("Creating order failed, no ID obtained.");
+                }
+            }
         } catch (SQLException e) {
             throw new RuntimeException("Error saving order to database: " + e.getMessage(), e);
         }
@@ -58,8 +62,9 @@ public class OrderRepository {
                 Order order = new Order();
                 order.setId(rs.getInt("id"));
                 order.getUser().setId(rs.getInt("user_id"));
-                order.setStatus(OrderStatus.valueOf(rs.getString("status")));
-                order.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                order.getCar().setId(rs.getInt("car_id"));
+                order.setStatus(OrderStatus.valueOf(rs.getString("order_status")));
+                order.setCreatedAt(rs.getTimestamp("order_date").toLocalDateTime());
                 orders.add(order);
             }
         } catch (SQLException e) {
@@ -86,8 +91,9 @@ public class OrderRepository {
                     order = new Order();
                     order.setId(rs.getInt("id"));
                     order.getUser().setId(rs.getInt("user_id"));
-                    order.setStatus(OrderStatus.valueOf(rs.getString("status")));
-                    order.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                    order.getCar().setId(rs.getInt("car_id"));
+                    order.setStatus(OrderStatus.valueOf(rs.getString("order_status")));
+                    order.setCreatedAt(rs.getTimestamp("order_date").toLocalDateTime());
                 }
             }
         } catch (SQLException e) {
@@ -102,13 +108,14 @@ public class OrderRepository {
      * @param order the order to update
      */
     public void update(Order order) {
-        String sql = "UPDATE entity_schema.orders SET user_id = ?, status = ?, created_at = ? WHERE id = ?";
+        String sql = "UPDATE entity_schema.orders SET user_id = ?, car_id = ?, order_status = ?, order_date = ?, total = ? WHERE id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, order.getUser().getId());
-            stmt.setString(2, order.getStatus().toString());
-            stmt.setTimestamp(3, Timestamp.valueOf(order.getCreatedAt()));
-            stmt.setInt(4, order.getId());
+            stmt.setInt(2, order.getCar().getId());
+            stmt.setString(3, order.getStatus().toString());
+            stmt.setTimestamp(4, Timestamp.valueOf(order.getCreatedAt()));
+            stmt.setInt(6, order.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error updating order in database: " + e.getMessage(), e);

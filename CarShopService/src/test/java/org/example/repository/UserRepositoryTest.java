@@ -3,47 +3,26 @@ package org.example.repository;
 import org.example.model.Order;
 import org.example.model.User;
 import org.example.model.UserRole;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserRepositoryTest {
+public class UserRepositoryTest extends BaseRepositoryTest {
 
-    private static PostgreSQLContainer<?> postgreSQLContainer;
     private UserRepository userRepository;
-
-    @BeforeAll
-    public static void setUp() {
-        postgreSQLContainer = new PostgreSQLContainer<>("postgres:latest")
-                .withDatabaseName("postgres")
-                .withUsername("root")
-                .withPassword("root");
-        postgreSQLContainer.start();
-
-        // Override the connection properties with Testcontainers JDBC URL
-        System.setProperty("database.url", postgreSQLContainer.getJdbcUrl());
-        System.setProperty("database.username", postgreSQLContainer.getUsername());
-        System.setProperty("database.password", postgreSQLContainer.getPassword());
-    }
 
     @BeforeEach
     public void init() {
         userRepository = new UserRepository();
     }
 
-    @AfterAll
-    public static void tearDown() {
-        postgreSQLContainer.stop();
-    }
-
     @Test
+    @DisplayName("Should create and find a user by ID")
     public void testCreateAndFindById() {
         List<Order> orders = new ArrayList<>();  // Assuming Order has a default constructor or similar
         User user = new User("anna", "pw123", UserRole.CUSTOMER, orders);
@@ -55,6 +34,7 @@ public class UserRepositoryTest {
     }
 
     @Test
+    @DisplayName("Should find all users in the repository")
     public void testFindAll() {
         List<Order> orders = new ArrayList<>();
         User user1 = new User("anna", "pw123", UserRole.CUSTOMER, orders);
@@ -69,17 +49,19 @@ public class UserRepositoryTest {
     }
 
     @Test
+    @DisplayName("Should find a user by username")
     public void testFindByUsername() {
         List<Order> orders = new ArrayList<>();
         User user = new User("new_user", "pw789", UserRole.ADMIN, orders);
         userRepository.create(user);
 
-        User foundUser = userRepository.findByUsername("unique_user");
+        User foundUser = userRepository.findByUsername("new_user");
         assertNotNull(foundUser);
         assertEquals(UserRole.ADMIN, foundUser.getRole());
     }
 
     @Test
+    @DisplayName("Should update a user")
     public void testUpdate() {
         List<Order> orders = new ArrayList<>();
         User user = new User("anna", "pw123", UserRole.CUSTOMER, orders);
@@ -98,6 +80,7 @@ public class UserRepositoryTest {
     }
 
     @Test
+    @DisplayName("Should delete a user")
     public void testDelete() {
         List<Order> orders = new ArrayList<>();
         User user = new User("new_user", "pw123", UserRole.CUSTOMER, orders);

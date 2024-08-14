@@ -1,21 +1,22 @@
 package org.example.repository;
 
+import lombok.extern.slf4j.Slf4j;
+import org.example.service.DatabaseService;
 import org.example.model.User;
 import org.example.model.UserRole;
-import org.example.util.IDGenerator;
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Slf4j
 public class UserRepository {
     private Connection connection;
     private static final String SEQUENCE_NAME = "entity_schema.users_id_seq";
 
     public UserRepository() {
         try {
-            this.connection = DatabaseConnection.getConnection();
-        } catch (SQLException | IOException e) {
+            this.connection = DatabaseService.getConnection();
+        } catch (Exception e) {
+            log.error(e.getMessage());
             throw new RuntimeException("Connection error: " + e.getMessage(), e);
         }
     }
@@ -26,13 +27,10 @@ public class UserRepository {
      * @param user the user to add
      */
     public void create(User user) {
-        int newId = IDGenerator.getNextId(SEQUENCE_NAME);
-        user.setId(newId);
 
-        String sql = "INSERT INTO entity_schema.users (id, username, password, role) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO entity_schema.users (username, password, role) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, user.getId());
             stmt.setString(2, user.getUsername());
             stmt.setString(3, user.getPassword());
             stmt.setString(4, user.getRole().toString());

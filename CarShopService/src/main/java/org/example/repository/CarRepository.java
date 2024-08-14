@@ -1,20 +1,19 @@
 package org.example.repository;
 
 import org.example.model.Car;
-import org.example.util.IDGenerator;
-import java.io.IOException;
+import org.example.service.DatabaseService;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CarRepository {
+
     private Connection connection;
-    private static final String SEQUENCE_NAME = "entity_schema.cars_id_seq";
 
     public CarRepository() {
         try {
-            this.connection = DatabaseConnection.getConnection();
-        } catch (SQLException | IOException e) {
+            this.connection = DatabaseService.getConnection();
+        } catch (Exception e) {
             throw new RuntimeException("Connection error: " + e.getMessage(), e);
         }
     }
@@ -25,17 +24,22 @@ public class CarRepository {
      * @param car the car to save
      */
     public void create(Car car) {
-        int newId = IDGenerator.getNextId(SEQUENCE_NAME);
-        car.setId(newId);
-
-        String sql = "INSERT INTO entity_schema.cars (id, model, brand, year, price) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, car.getId());
-            stmt.setString(2, car.getModel());
-            stmt.setString(3, car.getBrand());
-            stmt.setInt(4, car.getYear());
-            stmt.setDouble(5, car.getPrice());
+        String sql = "INSERT INTO entity_schema.cars (model, brand, year, price) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, car.getModel());
+            stmt.setString(2, car.getBrand());
+            stmt.setInt(3, car.getYear());
+            stmt.setDouble(4, car.getPrice());
             stmt.executeUpdate();
+
+            // Retrieve the generated ID
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    car.setId(generatedKeys.getInt(1));
+                } else {
+                    throw new SQLException("Creating car failed, no ID obtained.");
+                }
+            }
         } catch (SQLException e) {
             throw new RuntimeException("Error saving car to database: " + e.getMessage(), e);
         }
