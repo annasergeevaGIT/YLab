@@ -1,6 +1,7 @@
 package org.example.in;
 
 import org.example.command.*;
+import org.example.config.LiquibaseUpdater;
 import org.example.model.User;
 import org.example.model.UserRole;
 import org.example.repository.*;
@@ -16,6 +17,9 @@ public class MainMenuController {
      * Start the application.
      */
     public static void startApp() {
+        // Apply database migrations using Liquibase
+        LiquibaseUpdater.getInstance();
+
         UserRepository userRepository = new UserRepository();
         CarRepository carRepository = new CarRepository();
         OrderRepository orderRepository = new OrderRepository();
@@ -31,7 +35,7 @@ public class MainMenuController {
         AuthController authController = new AuthController(authService);
         UserController userController = new UserController(userService);
         CarController carController = new CarController(carService);
-        SearchController searchController = new SearchController(searchService, auditService);
+        SearchController searchController = new SearchController(searchService, auditService,authService);
         OrderController orderController = new OrderController(orderService, authService);
 
         initializeCommands(userController, carController, orderController, searchController);

@@ -2,17 +2,18 @@ package org.example.model;
 
 import lombok.Data;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.*;
 
 /**
  * Represents a user in the system.
  */
+@NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class User {
     private int id;
-    private static int idCounter = 1;
     private String username;
     private String password;
     private UserRole role;
@@ -27,8 +28,6 @@ public class User {
      * @param orders       the orders of the user
      */
     public User(String username, String password, UserRole role, List<Order> orders) {
-        this.id = this.idCounter;
-        this.idCounter++;
         this.username = username;
         this.password = password;
         this.role = role;

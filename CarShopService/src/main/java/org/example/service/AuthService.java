@@ -70,5 +70,13 @@ public class AuthService {
         }
         return null;
     }
+    /**
+     * Retrieves the currently logged-in user.
+     *
+     * @return the currently logged-in user
+     */
+    public User getCurrentUser() {
+        return currentUser;
+    }
 }
 

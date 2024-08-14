@@ -51,8 +51,8 @@ class SearchServiceTest {
     void testSearchOrders() {
         User customer = new User(1, "customer", "password", UserRole.CUSTOMER,null);
         Car car = new Car(1, "Toyota", "Camry", 2020, 30000.0, CarStatus.AVAILABLE);
-        Order order1 = new Order(1, car, customer, OrderStatus.PENDING);
-        Order order2 = new Order(2, car, customer, OrderStatus.COMPLETED);
+        Order order1 = new Order(1, car, customer, OrderStatus.PENDING, LocalDateTime.now());
+        Order order2 = new Order(2, car, customer, OrderStatus.COMPLETED, LocalDateTime.now());
         when(orderRepository.findAll()).thenReturn(Arrays.asList(order1, order2));
 
         List<Order> result = searchService.searchOrders(1, OrderStatus.PENDING, 1);
@@ -83,8 +83,8 @@ class SearchServiceTest {
     void testGetPurchaseCount() {
         User customer = new User(1, "customer", "password", UserRole.CUSTOMER,null);
         Car car = new Car(1, "Toyota", "Camry", 2020, 30000.0, CarStatus.AVAILABLE);
-        Order order1 = new Order(1, car, customer, OrderStatus.COMPLETED);
-        Order order2 = new Order(2, car, customer, OrderStatus.COMPLETED);
+        Order order1 = new Order(1, car, customer, OrderStatus.COMPLETED, LocalDateTime.now());
+        Order order2 = new Order(2, car, customer, OrderStatus.COMPLETED, LocalDateTime.now());
         when(orderRepository.findAll()).thenReturn(Arrays.asList(order1, order2));
 
         int count = searchService.getPurchaseCount(1);

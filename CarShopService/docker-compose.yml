@@ -1,0 +1,44 @@
+version: "3.8"
+services:
+  db:
+    container_name: postgres_container
+    image: postgres:16.4
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db_data/:/var/lib/postgresql/data/
+      - ./db_init/:/docker-entrypoint-initdb.d/ # Mounting SQL initialization scripts
+
+
+
+
+  #pgadmin:
+    #container_name: pgadmin4_container
+    #image: dpage/pgadmin4
+    #restart: always
+    #environment:
+      #PGADMIN_DEFAULT_EMAIL: sirgeeva1@gmail.com
+      #PGADMIN_DEFAULT_PASSWORD: root
+    #ports:
+      #- "5050:80"
+
+
+
+      #- ./db:/docker-entrypoint-initdb.d # Mounting SQL initialization scripts
+      #- data:/var/lib/postgresql/data
+      #- ./config/config.properties:/app/config/config.properties # Mounting configuration file for the app
+      #- ./db/changelog:/app/db/changelog
+      # MEMO:
+      # docker system prune -a --volumes
+      # docker stop $(docker ps -q)
+      # docker rm $(docker ps -a -q)
+      # docker ps -a
+      # docker container ls
+      # docker inspect #######
+      # docker-compose down
+      # docker-compose up --build

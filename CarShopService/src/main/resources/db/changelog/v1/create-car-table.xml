@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Create car_id_seq sequence -->
+    <changeSet id="car-id-seq-v1" author="anna">
+        <createSequence sequenceName="entity_schema.car_id_seq"
+                        startValue="1"/>
+    </changeSet>
+
+    <!-- Create cars -->
+    <changeSet id="car-v1" author="anna">
+
+        <createTable tableName="cars" schemaName="entity_schema">
+            <column name="id" type="INTEGER" defaultValueSequenceNext="entity_schema.car_id_seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="brand" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="year" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="DECIMAL(10, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>

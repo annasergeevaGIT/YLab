@@ -1,7 +1,10 @@
 package org.example.in;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.example.model.*;
 import org.example.service.AuditService;
+import org.example.service.AuthService;
 import org.example.service.SearchService;
 
 import java.io.FileWriter;
@@ -10,22 +13,16 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
+
 /**
  * Controller for searching and exporting logs.
  */
+@AllArgsConstructor
+@Data
 public class SearchController {
     private SearchService searchService;
     private AuditService auditService;
-
-    /**
-     * Constructs a SearchController with the specified AuditService.
-     *
-     * @param auditService the service for managing audit logs
-     */
-    public SearchController(SearchService searchService, AuditService auditService) {
-        this.searchService = searchService;
-        this.auditService = auditService;
-    }
+    private AuthService authService;
 
     /**
      * Managing user input to search cars by different parameters.
@@ -57,6 +54,10 @@ public class SearchController {
         for (Car car : cars) {
             System.out.println(car);
         }
+        User user = authService.getCurrentUser();
+        // Log the search action
+        auditService.logAction(user, "Searched cars with parameters: brand=" + brand + ", model=" + model
+                + ", year=" + year + ", price=" + price + ", status=" + status);
     }
 
     /**
@@ -93,10 +94,14 @@ public class SearchController {
                     order.getUser().getUsername(),
                     order.getStatus());
         }
+        User user = authService.getCurrentUser();
+        // Log the search action
+        auditService.logAction( user, "Searched orders with parameters: customerId=" + customerId + ", status="
+                + status + ", carId=" + carId);
     }
 
     /**
-     * Managing user input to search cars by different parameters.
+     * Managing user input to search users by different parameters.
      */
     public void searchUsers() {
         Scanner scanner = new Scanner(System.in);
@@ -142,6 +147,10 @@ public class SearchController {
                 }
             }
         }
+        User user = authService.getCurrentUser();
+        // Log the search action
+        auditService.logAction(user,"Searched users with parameters: userId=" + userId + ", username=" + username
+                + ", role=" + role + ", orderCount=" + orderCount);
     }
 
     /**
@@ -167,9 +176,13 @@ public class SearchController {
         action = action.isEmpty() ? null : action;
 
         List<AuditLog> filteredLogs = searchService.filterLogs(startDate, endDate, user, action);
-            for (AuditLog log : filteredLogs) {
+        for (AuditLog log : filteredLogs) {
             System.out.println(log);
         }
+        User currentUseruser = authService.getCurrentUser();
+        // Log the audit search action
+        auditService.logAction( currentUseruser,"Searched audit logs with parameters: startDate=" + startDate
+                + ", endDate=" + endDate + ", username=" + username + ", action=" + action);
     }
 
     /**
@@ -186,5 +199,8 @@ public class SearchController {
         } catch (IOException e) {
             System.out.println("Error while exporting log files: " + e.getMessage());
         }
+        User user = authService.getCurrentUser();
+        // Log the export action
+        auditService.logAction( user,"Exported audit logs to file audit_logs.txt");
     }
 }

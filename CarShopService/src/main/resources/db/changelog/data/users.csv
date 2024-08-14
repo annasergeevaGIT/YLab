@@ -1,0 +1,6 @@
+username,pw,role
+root,root,ADMIN
+kolya,kolya,MANAGER
+petya,petya,CUSTOMER
+vasya,vasya,CUSTOMER
+marina,marina,CUSTOMER

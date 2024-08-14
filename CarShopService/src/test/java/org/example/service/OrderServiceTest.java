@@ -8,6 +8,7 @@ import org.example.repository.CarRepository;
 import org.example.repository.OrderRepository;
 import org.example.repository.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,8 +39,8 @@ public class OrderServiceTest {
     void testGetAllOrders() {
         Car car = new Car(1, "Toyota", "Camry", 2020, 25000, CarStatus.AVAILABLE);
         User user = new User(1, "customer", "password", UserRole.CUSTOMER,null);
-        Order order1 = new Order(1, car, user, OrderStatus.PENDING);
-        Order order2 = new Order(2, car, user, OrderStatus.APPROVED);
+        Order order1 = new Order(1, car, user, OrderStatus.PENDING, LocalDateTime.now());
+        Order order2 = new Order(2, car, user, OrderStatus.APPROVED, LocalDateTime.now());
         when(orderRepository.findAll()).thenReturn(Arrays.asList(order1, order2));
 
         List<Order> orders = orderService.getAllOrders();

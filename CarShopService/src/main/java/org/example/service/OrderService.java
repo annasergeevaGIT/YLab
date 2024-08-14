@@ -1,5 +1,7 @@
 package org.example.service;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.example.model.*;
 import org.example.repository.*;
 
@@ -8,6 +10,8 @@ import java.util.List;
 /**
  * Service for managing orders.
  */
+@AllArgsConstructor
+@Data
 public class OrderService {
     private OrderRepository orderRepository;
     private CarRepository carRepository;
@@ -23,12 +27,6 @@ public class OrderService {
      * @param auditService    the service for logging actions
      */
 
-    public OrderService(OrderRepository orderRepository, CarRepository carRepository, UserRepository userRepository, AuditService auditService) {
-        this.orderRepository = orderRepository;
-        this.carRepository = carRepository;
-        this.userRepository = userRepository;
-        this.auditService = auditService;
-    }
 
     /**
      * Get all existing orders
@@ -91,6 +89,7 @@ public class OrderService {
                 user.setOrders(userOrders);
             }
             carRepository.update(order.getCar());
+            auditService.logAction(user, "Updated car, set new status " + order.getCar().getStatus());
         }
     }
 
