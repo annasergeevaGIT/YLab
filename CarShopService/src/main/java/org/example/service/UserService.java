@@ -1,5 +1,7 @@
 package org.example.service;
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.example.model.UserRole;
 import org.example.model.User;
 import org.example.repository.UserRepository;
@@ -8,7 +10,9 @@ import java.util.List;
 /**
  * Service for user management.
  */
+@Slf4j
 @AllArgsConstructor
+@Data
 public class UserService {
     private UserRepository userRepository;
 
@@ -44,6 +48,25 @@ public class UserService {
             userRepository.update(user);
         }
     }
+    /**
+     * Updates the role of a user.
+     *
+     * @param username the user to update
+     * @param newRole the new role
+     */
+    public boolean updateUserRoleByName(String username, UserRole newRole) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            user.setRole(newRole);
+            userRepository.update(user);
+            return true;
+
+        }
+        log.error("Failed to update user role");
+        return false;
+    }
+
+
 
     /**
      * Adding a user in the user repository.
@@ -53,6 +76,7 @@ public class UserService {
         User newUser = new User(username, password, role, null);
         userRepository.create(newUser);
     }
+
 
 
     /**

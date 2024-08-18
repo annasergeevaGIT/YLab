@@ -10,7 +10,6 @@ import java.sql.Connection;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import lombok.extern.slf4j.Slf4j;
-import org.example.service.DatabaseService;
 
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -20,11 +19,12 @@ import java.io.FileInputStream;
 @Slf4j
 public class LiquibaseUpdater {
     private static final LiquibaseUpdater INSTANCE = new LiquibaseUpdater();
+    private static final DatabaseService databaseService = new DatabaseService();
     private static Properties properties;
 
     public LiquibaseUpdater() {
         try {
-            try (Connection connection = DatabaseService.getConnection()) {
+            try (Connection connection = databaseService.getConnection()) {
                 Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
 
                 // Set the schema for Liquibase

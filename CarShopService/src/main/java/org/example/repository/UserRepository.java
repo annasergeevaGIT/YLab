@@ -1,20 +1,24 @@
 package org.example.repository;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.example.service.DatabaseService;
+import org.example.config.DatabaseService;
 import org.example.model.User;
 import org.example.model.UserRole;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+@Data
 @Slf4j
 public class UserRepository {
+    private static final DatabaseService databaseService = new DatabaseService();
     private Connection connection;
     private static final String SEQUENCE_NAME = "entity_schema.users_id_seq";
 
     public UserRepository() {
         try {
-            this.connection = DatabaseService.getConnection();
+            this.connection = databaseService.getConnection();
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new RuntimeException("Connection error: " + e.getMessage(), e);

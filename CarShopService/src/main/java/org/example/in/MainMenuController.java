@@ -1,6 +1,7 @@
 package org.example.in;
 
 import org.example.command.*;
+import org.example.config.DatabaseService;
 import org.example.config.LiquibaseUpdater;
 import org.example.model.User;
 import org.example.model.UserRole;
@@ -29,6 +30,7 @@ public class MainMenuController {
         AuthService authService = new AuthService(userRepository, auditService);
         UserService userService = new UserService(userRepository);
         CarService carService = new CarService(carRepository, auditService, authService);
+        DatabaseService databaseService = new DatabaseService();
         SearchService searchService = new SearchService(carRepository, orderRepository, userRepository, auditRepository);
         OrderService orderService = new OrderService(orderRepository, carRepository, userRepository, auditService);
 
@@ -67,6 +69,7 @@ public class MainMenuController {
                 }
             } else if (choice == 3) {
                 System.out.print("Bye!");
+                databaseService.closeConnection();
                 break;
             }
         }

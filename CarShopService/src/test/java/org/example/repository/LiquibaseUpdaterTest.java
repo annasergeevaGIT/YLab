@@ -1,7 +1,6 @@
 package org.example.repository;
 
-import lombok.var;
-import org.example.service.DatabaseService;
+import org.example.config.DatabaseService;
 import org.example.config.LiquibaseUpdater;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;

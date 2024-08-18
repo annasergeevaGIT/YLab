@@ -2,6 +2,8 @@ package org.example.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.example.dto.OrderDTO;
 import org.example.model.*;
 import org.example.repository.*;
 
@@ -18,14 +20,9 @@ public class OrderService {
     private UserRepository userRepository;
     private AuditService auditService;
 
-    /**
-     * Constructs an OrderService with the specified repositories and AuditService.
-     *
-     * @param orderRepository the repository for orders
-     * @param carRepository   the repository for cars
-     * @param userRepository  the repository for users
-     * @param auditService    the service for logging actions
-     */
+    public OrderService() {
+
+    }
 
 
     /**
@@ -108,5 +105,10 @@ public class OrderService {
             carRepository.update(order.getCar());
             auditService.logAction(user, "Cancelled order ID: " + orderId + "User ID:" + user.getId()); // Audit log
         }
+    }
+
+    public Order getOrderById(int orderId) {
+        Order order = orderRepository.findById(orderId);
+        return order;
     }
 }
