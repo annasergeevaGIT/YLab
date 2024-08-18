@@ -39,6 +39,9 @@ public class UserServletTest {
     private AuthService authService; // Mocked AuthService
 
     @Mock
+    private UserMapper userMapper; // Maps the user to DTO and back
+
+    @Mock
     private UserService userService; // Mocked UserService
 
     @InjectMocks
@@ -157,7 +160,7 @@ public class UserServletTest {
         when(request.getParameter("password")).thenReturn("password");
         when(authService.login("user1", "password")).thenReturn(user);
         when(objectMapper.writeValueAsString(userDTO)).thenReturn("{}");
-        when(UserMapper.toUserDTO(user)).thenReturn(userDTO);
+        when(userMapper.toUserDTO(user)).thenReturn(userDTO);
 
         // Act
         userServlet.doGet(request, response);
