@@ -27,11 +27,13 @@ public class User {
      * @param role         the role of the user (CUSTOMER, MANAGER, ADMIN)
      * @param orders       the orders of the user
      */
+
     public User(String username, String password, UserRole role, List<Order> orders) {
         this.username = username;
         this.password = password;
         this.role = role;
         this.orders = orders;
     }
+
 }
 

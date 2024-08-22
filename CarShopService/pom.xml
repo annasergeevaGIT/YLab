@@ -5,7 +5,7 @@
   <groupId>org.example</groupId>
   <artifactId>CarShopService</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
 
   <name>CarShopService</name>
   <url>http://maven.apache.org</url>
@@ -13,18 +13,32 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>17</java.version>
-    <junit-jupiter-api.version>5.10.3</junit-jupiter-api.version>
-    <junit-jupiter-engine.version>5.11.0-RC1</junit-jupiter-engine.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <junit-jupiter.version>5.10.3</junit-jupiter.version>
     <testcontainers.version>1.20.1</testcontainers.version>
     <mockito-core.version>5.12.0</mockito-core.version>
     <assertj-core.version>3.26.3</assertj-core.version>
     <lombok.version>1.18.34</lombok.version>
     <logback-classic.version>1.5.6</logback-classic.version>
-    <slf4j-api.version>2.0.13</slf4j-api.version>
+    <slf4j-api.version>2.0.16</slf4j-api.version>
+    <!--JDBC-->
     <postgresql.version>42.7.3</postgresql.version>
     <liquibase-core.version>4.29.1</liquibase-core.version>
+    <!--Servlet API-->
+    <mapstruct.version>1.6.0</mapstruct.version>
+    <javax.servlet.version>4.0.1</javax.servlet.version>
+    <jackson.version>2.17.2</jackson.version>
+    <jstl.version>1.2</jstl.version>
 
-    <junit-jupiter.version>1.20.1</junit-jupiter.version>
+    <aspectj.version>1.9.22</aspectj.version>
+    <jetty-servlet.version>11.0.22</jetty-servlet.version>
+    <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
+    <jakarta.validation-api.version>3.1.0</jakarta.validation-api.version>
+    <hibernate-validator.version>9.0.0.Beta2</hibernate-validator.version>
+    <!--Spring-->
+    <spring-context.version>6.1.12</spring-context.version>
+
   </properties>
 
   <dependencies>
@@ -32,14 +46,14 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>${junit-jupiter-api.version}</version>
+      <version>${junit-jupiter.version}</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
     <groupId>org.junit.jupiter</groupId>
     <artifactId>junit-jupiter-engine</artifactId>
-    <version>${junit-jupiter-engine.version}</version>
+    <version>${junit-jupiter.version}</version>
     <scope>test</scope>
     </dependency>
 
@@ -67,7 +81,7 @@
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>${junit-jupiter.version}</version>
+      <version>${testcontainers.version}</version>
       <scope>test</scope>
     </dependency>
 
@@ -106,8 +120,133 @@
       <version>${liquibase-core.version}</version>
     </dependency>
 
+    <!-- Servlet API + -->
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>${jakarta.servlet-api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>${javax.servlet.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>${jstl.version}</version>
+    </dependency>
+
+    <!-- Jackson -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-hibernate5</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+    <!-- MapStruct -->
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+      <version>${mapstruct.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct-processor</artifactId>
+      <version>${mapstruct.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Validation API -->
+    <dependency>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
+      <version>${jakarta.validation-api.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>${hibernate-validator.version}</version>
+    </dependency>
+
+    <!-- AspectJ -->
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjrt</artifactId>
+      <version>${aspectj.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjweaver</artifactId>
+      <version>${aspectj.version}</version>
+    </dependency>
+
+    <!-- Servlet Testing (JUnit + MockServlet) -->
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-servlet</artifactId>
+      <version>${jetty-servlet.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-server</artifactId>
+      <version>${jetty-servlet.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Spring -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>${spring-context.version}</version>
+    </dependency>
+
+
   </dependencies>
+
   <build>
+    <pluginManagement>
+      <plugins>
+        <!-- Compiler Plugin for MapStruct -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.10.1</version>
+          <configuration>
+            <source>${java.version}</source>
+            <target>${java.version}</target>
+            <annotationProcessorPaths>
+              <path>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${mapstruct.version}</version>
+              </path>
+            </annotationProcessorPaths>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <resources>
       <resource>
         <directory>src/main/resources</directory>

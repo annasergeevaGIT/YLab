@@ -1,16 +1,24 @@
 package org.example.in;
 
+import org.example.dto.UserDTO;
+import org.example.mapper.*;
 import org.example.model.User;
+import org.example.model.UserRole;
 import org.example.service.AuthService;
+import org.mapstruct.factory.Mappers;
+
 import java.util.Scanner;
 /**
  * Handling user input for logging and authorisation actions.
  */
 public class AuthController {
     private AuthService authService;
+    private UserMapper userMapper;
 
     public AuthController(AuthService authService) {
+
         this.authService = authService;
+        this.userMapper = Mappers.getMapper(UserMapper.class);
     }
 
     /**
@@ -23,7 +31,10 @@ public class AuthController {
         System.out.print("Password: ");
         String password = scanner.nextLine();
 
-        if (authService.register(username, password)) {
+        User user = new User(username, password,UserRole.CUSTOMER,null);
+        UserDTO userDTO = userMapper.toUserDTO(user);
+
+        if (authService.register(userDTO)) {
             System.out.println("Register successful.");
         } else {
             System.out.println("Username already in use.");

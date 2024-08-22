@@ -1,18 +1,23 @@
 package org.example.repository;
 
-import org.example.service.DatabaseService;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.example.config.DatabaseService;
 import org.example.model.Order;
 import org.example.model.OrderStatus;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
+@Slf4j
 public class OrderRepository {
+    private static final DatabaseService databaseService = new DatabaseService();
     private Connection connection;
 
     public OrderRepository() {
         try {
-            this.connection = DatabaseService.getConnection();
+            this.connection = databaseService.getConnection();
         } catch (Exception e) {
             throw new RuntimeException("Connection error: " + e.getMessage());
         }

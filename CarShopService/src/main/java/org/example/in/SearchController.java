@@ -6,6 +6,7 @@ import org.example.model.*;
 import org.example.service.AuditService;
 import org.example.service.AuthService;
 import org.example.service.SearchService;
+import org.example.util.AuditLog;
 
 import java.io.FileWriter;
 import java.io.IOException;

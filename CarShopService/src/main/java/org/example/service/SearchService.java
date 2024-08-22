@@ -1,8 +1,12 @@
 package org.example.service;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.example.model.*;
 import org.example.repository.AuditRepository;
 import org.example.repository.*;
+import org.example.util.AuditLog;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,25 +14,13 @@ import java.util.stream.Collectors;
 /**
  * Service to perform search in the car, user and order repositories.
  */
+@AllArgsConstructor
+@Data
 public class SearchService {
     private CarRepository carRepository;
     private OrderRepository orderRepository;
     private UserRepository userRepository;
     private AuditRepository auditRepository;
-
-    /**
-     * Constructor
-     * @param carRepository
-     * @param orderRepository
-     * @param userRepository
-     * @param auditRepository
-     */
-    public SearchService(CarRepository carRepository, OrderRepository orderRepository, UserRepository userRepository, AuditRepository auditRepository) {
-        this.carRepository = carRepository;
-        this.orderRepository = orderRepository;
-        this.userRepository = userRepository;
-        this.auditRepository = auditRepository;
-    }
 
     /**
      * Search cas by different parameters.

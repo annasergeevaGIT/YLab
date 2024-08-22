@@ -1,8 +1,7 @@
-package org.example.model;
+package org.example.util;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.example.model.User;
 
 import java.time.LocalDateTime;
 
@@ -30,4 +29,5 @@ public class AuditLog {
         this.action = action;
         this.timestamp = timestamp;
     }
+
 }

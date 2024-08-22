@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("AuthService Tests")
 public class AuthServiceTest {
@@ -82,5 +84,16 @@ public class AuthServiceTest {
 
         assertThat(result).isNull();
         verify(auditService, never()).logAction(any(User.class), anyString());
+    }
+
+    @Test
+    public void register() {
+        AuthService a = new AuthService(new UserRepository(), new AuditService());
+        String username = "abc";
+        String password = "abc";
+        boolean expected = true;
+        boolean actual = a.register(username, password);
+
+        assertEquals(expected, actual);
     }
 }

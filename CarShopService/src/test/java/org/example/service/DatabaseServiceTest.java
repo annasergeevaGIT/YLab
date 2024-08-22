@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.config.DatabaseService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class DatabaseServiceTest {
+    private static final DatabaseService databaseService = new DatabaseService();
+
     private static PostgreSQLContainer<?> postgreSQLContainer;
 
     @BeforeAll
@@ -37,7 +40,7 @@ public class DatabaseServiceTest {
     @Test
     public void getConnection() throws IOException, SQLException {
         Connection expected = null;
-        Connection actual = DatabaseService.getConnection();
+        Connection actual = databaseService.getConnection();
 
         assertEquals(expected, actual);
     }

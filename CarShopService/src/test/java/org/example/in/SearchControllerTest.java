@@ -1,6 +1,6 @@
 package org.example.in;
 
-import org.example.model.AuditLog;
+import org.example.util.AuditLog;
 import org.example.model.User;
 import org.example.model.UserRole;
 import org.example.service.AuthService;

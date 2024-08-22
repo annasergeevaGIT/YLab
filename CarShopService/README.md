@@ -1,49 +1,113 @@
-# CarShop-Service
+# RESTful Application README
 
-# Description
-A simple console application for managing a car dealership. Supports user registration and authorization with role management, viewing the list of registered clients and employees, and adding and editing employee information.
+## Running the Application
+Deploy the application to a servlet container like Apache Tomcat or Jetty. Access the endpoints using an HTTP client or web browser to interact with the RESTful services.
 
-# Project Structure
-- **model**: Contains classes for data representation.
-- **service**: Contains the application logic.
-- **in**: Controllers for handling input.
-- **out**: Repositories for data storage. Currently empty
-- **main**: The entry point of the application.
+## Overview
+This application has been converted from a console-based interface to a RESTful service. All interactions with the system are now performed via HTTP requests, using JSON for data exchange. The application utilizes Java Servlets for handling HTTP requests, Jackson for JSON serialization/deserialization, and MapStruct for mapping between entities and DTOs. It also includes validation and logging features.
 
-## Build and Run
-1. Clone the repository.
-2. Navigate to the project directory.
-3. Build the Docker Image: `docker-compose up --build`
-4. Compile the project: `mvn compile`
-5. Run the project: `java -cp .\target\classes org.example.Main`
+## Features
+RESTful API: Communicate with the application through HTTP requests. Servlets handle the routing and processing of requests.
+JSON Handling: All data is exchanged in JSON format. Jackson is used for serializing and deserializing JSON.
+DTOs and Mapping: Data Transfer Objects (DTOs) are used for data exchange. MapStruct is used to map entities to DTOs and vice versa.
+Validation: Incoming DTOs are validated to ensure they meet the required constraints.
+Logging and Auditing: Actions are logged with execution time measurement. Aspect-Oriented Programming (AOP) is used for auditing and logging user actions.
+Testing: Comprehensive tests are included to ensure the functionality and reliability of the servlets.
+## Endpoints
+#### User Endpoints
+#### Register User
 
+#### Endpoint: POST /users
+Description: Registers a new user.
+Request Body: UserDTO in JSON format.
+Response: JSON response with a success message or error details.
+Status Codes:
+201 Created - User successfully registered.
+400 Bad Request - Invalid user data.
+409 Conflict - User already exists.
+Login User
 
-## Example Usage:
+#### Endpoint: GET /users
+Description: Logs in a user.
+Query Parameters: username, password
+Response: JSON response with user details or error message.
+Status Codes:
+200 OK - User successfully logged in.
+401 Unauthorized - Invalid credentials.
+400 Bad Request - Missing username or password.
+Assign Role
 
-User Registration and Authorization:
+#### Endpoint: PUT /users
+Description: Assigns a role to a user (admin only).
+Query Parameters: username, role
+Response: JSON response with success or failure message.
+Status Codes:
+200 OK - Role assigned successfully.
+400 Bad Request - Missing username or role, or invalid role.
+403 Forbidden - User does not have permission.
+404 Not Found - User not found.+
+## Order Endpoints
+#### Create Order
 
-A user with the ADMIN role, login "root," and password "root" is automatically created when the application starts.
+#### Endpoint: POST /orders
+Description: Creates a new order for a customer.
+Request Body: OrderDTO in JSON format.
+Response: JSON response with success message or error details.
+Status Codes:
+201 Created - Order created successfully.
+400 Bad Request - Invalid order data.
+Get Order
 
-User Authorization:
-A user can log in using a username and password. The CUSTOMER role is automatically assigned, but it can be changed by the ADMIN.
+#### Endpoint: GET /orders
+Description: Retrieves an order by ID.
+Query Parameters: id
+Response: JSON response with order details or error message.
+Status Codes:
+200 OK - Order found and returned.
+404 Not Found - Order not found.
+403 Forbidden - Access denied for customers.
+Update Order Status
 
-Car and Order Management:
-ADMIN and MANAGER can view, add, edit, and delete cars.
-ADMIN and MANAGER can manage orders.
-CUSTOMER can view available cars and create orders.
+#### Endpoint: PUT /orders
+Description: Updates the status of an existing order.
+Request Body: OrderDTO in JSON format.
+Response: JSON response with success or failure message.
+Status Codes:
+200 OK - Order status updated successfully.
+400 Bad Request - Invalid order data.
+403 Forbidden - Access denied for unauthorized users.
+Cancel Order
 
-Exporting Audit Logs:
-ADMIN can export audit logs to a file.
+#### Endpoint: DELETE /orders
+Description: Cancels an order.
+Query Parameters: id
+Response: JSON response with success or failure message.
+Status Codes:
+200 OK - Order canceled successfully.
+400 Bad Request - Missing order ID or invalid data.
+403 Forbidden - Access denied for unauthorized users.
 
-# Features
-User registration and authentication (admin, manager, customer).
-Car management (add, edit, delete, view list).
-Processing car purchase orders.
-View and manage orders (search, change status, cancel).
-User action logging.
+## Setup and Configuration
+Dependencies: 
+Ensure the following libraries are included in your build:
 
-# Requirements
-Java 17,
-Maven (for dependency management and project build),
-JUnit5 (for testing)
-Docker
+Jackson for JSON handling.
+MapStruct for object mapping.
+JUnit for testing.
+Servlet Configuration: 
+Configure your web.xml or use annotations to define servlet mappings and ensure they accept and return JSON.
+
+DTO Annotations:
+Add Jackson annotations to your DTOs if necessary for proper serialization/deserialization.
+
+Validation: 
+Implement validation logic in the DTO classes and configure the application to use these validations.
+
+Logging and Auditing: 
+Set up AOP for logging method execution and auditing user actions.
+
+## Testing
+Use JUnit 5 to run the provided tests for the servlets and DTO validation. Ensure all tests pass before deploying the application.
+
+Unit Tests: Located in the src/test/java directory.
+Integration Tests: Use tools like Chrome Extensions or Python scripts to send HTTP requests and validate responses.

@@ -1,34 +1,42 @@
 package org.example.in;
 
 import org.example.command.*;
+import org.example.config.DatabaseService;
 import org.example.config.LiquibaseUpdater;
+import org.example.dto.UserDTO;
+import org.example.mapper.UserMapper;
 import org.example.model.User;
 import org.example.model.UserRole;
 import org.example.repository.*;
 import org.example.service.*;
+import org.mapstruct.control.MappingControl;
+import org.mapstruct.factory.Mappers;
+
 import java.util.*;
 
 public class MainMenuController {
     private static final Map<Integer, Command> adminCommands = new HashMap<>();
     private static final Map<Integer, Command> managerCommands = new HashMap<>();
     private static final Map<Integer, Command> customerCommands = new HashMap<>();
-
+    private UserMapper userMapper;
     /**
      * Start the application.
      */
     public static void startApp() {
         // Apply database migrations using Liquibase
         LiquibaseUpdater.getInstance();
+        UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
         UserRepository userRepository = new UserRepository();
         CarRepository carRepository = new CarRepository();
         OrderRepository orderRepository = new OrderRepository();
         AuditRepository auditRepository = new AuditRepository();
 
+        UserService userService = new UserService(userRepository);
         AuditService auditService = new AuditService(auditRepository);
         AuthService authService = new AuthService(userRepository, auditService);
-        UserService userService = new UserService(userRepository);
         CarService carService = new CarService(carRepository, auditService, authService);
+        DatabaseService databaseService = new DatabaseService();
         SearchService searchService = new SearchService(carRepository, orderRepository, userRepository, auditRepository);
         OrderService orderService = new OrderService(orderRepository, carRepository, userRepository, auditService);
 
@@ -39,11 +47,12 @@ public class MainMenuController {
         OrderController orderController = new OrderController(orderService, authService);
 
         initializeCommands(userController, carController, orderController, searchController);
-
         Scanner scanner = new Scanner(System.in);
 
         // Create a root admin user, set login and password for root Admin
-        authService.registerAdmin("root", "root");
+        User user = new User("root", "root",UserRole.ADMIN,null);
+        UserDTO userDTO = userMapper.toUserDTO(user);
+        authService.registerAdmin(userDTO);
         User loggedInUser = null;
 
         // Print the main menu and redirect based on user role.
@@ -67,6 +76,7 @@ public class MainMenuController {
                 }
             } else if (choice == 3) {
                 System.out.print("Bye!");
+                databaseService.closeConnection();
                 break;
             }
         }

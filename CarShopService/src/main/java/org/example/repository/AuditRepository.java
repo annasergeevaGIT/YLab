@@ -1,21 +1,24 @@
 package org.example.repository;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.example.model.AuditLog;
-import org.example.service.DatabaseService;
+import org.example.util.AuditLog;
+import org.example.config.DatabaseService;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 @Slf4j
 public class AuditRepository {
 
     private Connection connection;
+    private static final DatabaseService databaseService = new DatabaseService();
 
     public AuditRepository() {
         try {
-            this.connection = DatabaseService.getConnection();
+            this.connection = databaseService.getConnection();
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new RuntimeException("Connection error: " + e.getMessage(), e);
