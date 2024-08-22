@@ -3,6 +3,8 @@ package org.example.in;
 import org.example.command.*;
 import org.example.config.DatabaseService;
 import org.example.config.LiquibaseUpdater;
+import org.example.dto.UserDTO;
+import org.example.mapper.UserMapper;
 import org.example.model.User;
 import org.example.model.UserRole;
 import org.example.repository.*;
@@ -26,9 +28,9 @@ public class MainMenuController {
         OrderRepository orderRepository = new OrderRepository();
         AuditRepository auditRepository = new AuditRepository();
 
+        UserService userService = new UserService(userRepository);
         AuditService auditService = new AuditService(auditRepository);
         AuthService authService = new AuthService(userRepository, auditService);
-        UserService userService = new UserService(userRepository);
         CarService carService = new CarService(carRepository, auditService, authService);
         DatabaseService databaseService = new DatabaseService();
         SearchService searchService = new SearchService(carRepository, orderRepository, userRepository, auditRepository);
@@ -45,7 +47,9 @@ public class MainMenuController {
         Scanner scanner = new Scanner(System.in);
 
         // Create a root admin user, set login and password for root Admin
-        authService.registerAdmin("root", "root");
+        User user = new User("root", "root",UserRole.ADMIN,null);
+        UserDTO userDTO = UserMapper.toUserDTO(user);
+        authService.registerAdmin(userDTO);
         User loggedInUser = null;
 
         // Print the main menu and redirect based on user role.

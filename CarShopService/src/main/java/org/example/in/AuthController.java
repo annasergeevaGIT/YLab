@@ -1,6 +1,9 @@
 package org.example.in;
 
+import org.example.dto.UserDTO;
+import org.example.mapper.UserMapper;
 import org.example.model.User;
+import org.example.model.UserRole;
 import org.example.service.AuthService;
 import java.util.Scanner;
 /**
@@ -23,7 +26,10 @@ public class AuthController {
         System.out.print("Password: ");
         String password = scanner.nextLine();
 
-        if (authService.register(username, password)) {
+        User user = new User(username, password,UserRole.CUSTOMER,null);
+        UserDTO userDTO = UserMapper.toUserDTO(user);
+
+        if (authService.register(userDTO)) {
             System.out.println("Register successful.");
         } else {
             System.out.println("Username already in use.");

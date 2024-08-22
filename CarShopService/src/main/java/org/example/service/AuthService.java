@@ -36,6 +36,7 @@ public class AuthService {
      * @return true if registration is successful, false if user already exists
      */
     public boolean register(UserDTO userDTO) {
+
         if (userRepository.findByUsername(userDTO.getUsername()) != null) {
             return false; // User already exists.
         }

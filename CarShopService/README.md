@@ -45,7 +45,7 @@ Status Codes:
 200 OK - Role assigned successfully.
 400 Bad Request - Missing username or role, or invalid role.
 403 Forbidden - User does not have permission.
-404 Not Found - User not found.
+404 Not Found - User not found.+
 ## Order Endpoints
 #### Create Order
 

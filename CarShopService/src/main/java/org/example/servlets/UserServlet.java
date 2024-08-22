@@ -89,7 +89,7 @@ public class UserServlet extends HttpServlet {
         try {
             User user = authService.login(username, password);
             if (user != null) {
-                UserDTO userDTO = userMapper.toUserDTO(user); // Use UserMapper to convert User to UserDTO
+                UserDTO userDTO = UserMapper.toUserDTO(user); // Use UserMapper to convert User to UserDTO
                 response.setStatus(HttpServletResponse.SC_OK);
                 response.getWriter().write(objectMapper.writeValueAsString(userDTO)); // Serialize UserDTO to JSON
                 log.info("User logged in successfully: {}", username);

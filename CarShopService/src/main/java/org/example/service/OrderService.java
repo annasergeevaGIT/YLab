@@ -12,6 +12,7 @@ import java.util.List;
 /**
  * Service for managing orders.
  */
+@NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class OrderService {
@@ -19,10 +20,6 @@ public class OrderService {
     private CarRepository carRepository;
     private UserRepository userRepository;
     private AuditService auditService;
-
-    public OrderService() {
-
-    }
 
 
     /**

@@ -1,6 +1,7 @@
 package org.example.service;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.model.UserRole;
 import org.example.model.User;
@@ -12,6 +13,7 @@ import java.util.List;
  */
 @Slf4j
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class UserService {
     private UserRepository userRepository;
