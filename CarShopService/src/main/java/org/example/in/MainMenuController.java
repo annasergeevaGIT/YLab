@@ -9,19 +9,23 @@ import org.example.model.User;
 import org.example.model.UserRole;
 import org.example.repository.*;
 import org.example.service.*;
+import org.mapstruct.control.MappingControl;
+import org.mapstruct.factory.Mappers;
+
 import java.util.*;
 
 public class MainMenuController {
     private static final Map<Integer, Command> adminCommands = new HashMap<>();
     private static final Map<Integer, Command> managerCommands = new HashMap<>();
     private static final Map<Integer, Command> customerCommands = new HashMap<>();
-
+    private UserMapper userMapper;
     /**
      * Start the application.
      */
     public static void startApp() {
         // Apply database migrations using Liquibase
         LiquibaseUpdater.getInstance();
+        UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
         UserRepository userRepository = new UserRepository();
         CarRepository carRepository = new CarRepository();
@@ -43,12 +47,11 @@ public class MainMenuController {
         OrderController orderController = new OrderController(orderService, authService);
 
         initializeCommands(userController, carController, orderController, searchController);
-
         Scanner scanner = new Scanner(System.in);
 
         // Create a root admin user, set login and password for root Admin
         User user = new User("root", "root",UserRole.ADMIN,null);
-        UserDTO userDTO = UserMapper.toUserDTO(user);
+        UserDTO userDTO = userMapper.toUserDTO(user);
         authService.registerAdmin(userDTO);
         User loggedInUser = null;
 

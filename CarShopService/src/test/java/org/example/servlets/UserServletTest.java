@@ -17,6 +17,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+
+
 import java.io.*;
 import java.util.Collections;
 import java.util.List;
@@ -47,7 +49,7 @@ public class UserServletTest {
     @InjectMocks
     private UserServlet userServlet; // Servlet under test
 
-    private HttpServletRequest request; // Mocked HttpServletRequest
+    private HttpServletRequest request; // Mocked HttpServletRequest;
     private HttpServletResponse response; // Mocked HttpServletResponse
     private ByteArrayOutputStream responseOutputStream; // Output stream for capturing response
 

@@ -18,6 +18,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.mapstruct.factory.Mappers;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,7 +32,7 @@ public class UserServlet extends HttpServlet {
     private DTOValidator dtoValidator;
     private AuthService authService;
     private UserService userService;
-    private final UserMapper userMapper = Mappers.getMapper(UserMapper.class); // MapStruct UserMapper
+    private UserMapper userMapper;
 
     @Override
     public void init() throws ServletException {
@@ -40,6 +41,7 @@ public class UserServlet extends HttpServlet {
         objectMapper = context.getObjectMapper(); // Jackson ObjectMapper
         dtoValidator = context.getDtoValidator();
         userService = context.getUserService();
+        this.userMapper =  Mappers.getMapper(UserMapper.class); // MapStruct UserMapper
     }
 
     @Override
@@ -89,7 +91,7 @@ public class UserServlet extends HttpServlet {
         try {
             User user = authService.login(username, password);
             if (user != null) {
-                UserDTO userDTO = UserMapper.toUserDTO(user); // Use UserMapper to convert User to UserDTO
+                UserDTO userDTO = userMapper.toUserDTO(user); // Use UserMapper to convert User to UserDTO
                 response.setStatus(HttpServletResponse.SC_OK);
                 response.getWriter().write(objectMapper.writeValueAsString(userDTO)); // Serialize UserDTO to JSON
                 log.info("User logged in successfully: {}", username);
