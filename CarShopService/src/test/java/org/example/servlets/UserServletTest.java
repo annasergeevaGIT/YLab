@@ -3,11 +3,11 @@ package org.example.servlets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.dto.UserDTO;
+import org.example.domain.dto.UserDTO;
 import org.example.mapper.UserMapper;
-import org.example.model.User;
-import org.example.model.UserRole;
-import org.example.service.AuthService;
+import org.example.domain.model.User;
+import org.example.domain.model.UserRole;
+import org.example.service.AuthServiceJdbc;
 import org.example.service.UserService;
 import org.example.util.DTOValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +21,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.*;
 import java.util.Collections;
-import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -38,7 +37,7 @@ public class UserServletTest {
     private DTOValidator dtoValidator; // Mocked DTO Validator
 
     @Mock
-    private AuthService authService; // Mocked AuthService
+    private AuthServiceJdbc authService; // Mocked AuthService
 
     @Mock
     private UserMapper userMapper; // Maps the user to DTO and back

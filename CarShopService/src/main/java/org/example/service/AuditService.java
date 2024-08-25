@@ -1,40 +1,38 @@
 package org.example.service;
 
 import lombok.AllArgsConstructor;
-import org.example.model.User;
+import lombok.Data;
 import org.example.repository.AuditRepository;
-import org.example.util.AuditLog;
+import org.example.domain.model.AuditLog;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.stereotype.Service;
+
 
 /**
  * Service for managing audit logs.
  */
 @AllArgsConstructor
+@Data
+@Service
 public class AuditService {
     private final AuditRepository auditRepository;
 
     /**
      * Logs an action performed by a user.
      *
-     * @param user   the user who performed the action
+     * @param userId   the userId who performed the action
      * @param action the action performed by the user
      */
-    public void logAction(User user, String action) {
+    public void logAction(int userId, String action) {
         AuditLog logEntry = new AuditLog();
         logEntry.setAction(action);
-        logEntry.setUser(user);
-        logEntry.setTimestamp(LocalDateTime.now());
+        logEntry.setUserId(userId);
         auditRepository.create(logEntry);
     }
 
-    /**
-     * Retrieves all audit logs.
-     *
-     * @return all log entries
-     */
     public List<AuditLog> getAllLogs() {
         return auditRepository.findAll();
     }
 }
+

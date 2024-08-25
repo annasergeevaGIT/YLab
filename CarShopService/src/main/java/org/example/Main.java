@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.in.*;
+import org.example.controller.*;
 
 /**
  * The main class

@@ -1,5 +1,9 @@
 package org.example.service;
 
+import org.example.domain.model.Car;
+import org.example.domain.model.CarStatus;
+import org.example.domain.model.User;
+import org.example.domain.model.UserRole;
 import org.example.model.*;
 import org.example.repository.CarRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +28,7 @@ class CarServiceTest {
     private AuditService auditService;
 
     @Mock
-    private AuthService authService;
+    private AuthServiceJdbc authService;
 
     @InjectMocks
     private CarService carService;

@@ -1,8 +1,8 @@
 package org.example.util;
 
-import org.example.dto.UserDTO;
-import org.example.dto.CarDTO;
-import org.example.dto.OrderDTO;
+import org.example.domain.dto.UserDTO;
+import org.example.domain.dto.CarDTO;
+import org.example.domain.dto.OrderDTO;
 
 import java.util.ArrayList;
 import java.util.List;

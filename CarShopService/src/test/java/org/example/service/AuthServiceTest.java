@@ -1,7 +1,7 @@
 package org.example.service;
 
-import org.example.model.UserRole;
-import org.example.model.User;
+import org.example.domain.model.UserRole;
+import org.example.domain.model.User;
 import org.example.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -9,13 +9,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
-import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("AuthService Tests")
 public class AuthServiceTest {
 
-    private AuthService authService;
+    private AuthServiceJdbc authService;
     private UserRepository userRepository;
     private AuditService auditService;
 
@@ -24,7 +23,7 @@ public class AuthServiceTest {
     void setUp() {
         userRepository = mock(UserRepository.class);
         auditService = mock(AuditService.class);
-        authService = new AuthService(userRepository, auditService);
+        authService = new AuthServiceJdbc(userRepository, auditService);
     }
 
     @Test
@@ -88,7 +87,7 @@ public class AuthServiceTest {
 
     @Test
     public void register() {
-        AuthService a = new AuthService(new UserRepository(), new AuditService());
+        AuthServiceJdbc a = new AuthServiceJdbc(new UserRepository(), new AuditService());
         String username = "abc";
         String password = "abc";
         boolean expected = true;

@@ -14,19 +14,6 @@ services:
       #- ./db_data/:/var/lib/postgresql/data/
       - ./db_init/:/docker-entrypoint-initdb.d/ # Mounting SQL initialization scripts
 
-  tomcat:
-    container_name: tomcat_container
-    image: tomcat:9.0
-    restart: always
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./CarShopService.war:/usr/local/tomcat/webapps/CarShopService.war
-    environment:
-      DB_HOST: db
-      DB_NAME: postgres
-      DB_USER: root
-      DB_PASSWORD: root
 
 
 

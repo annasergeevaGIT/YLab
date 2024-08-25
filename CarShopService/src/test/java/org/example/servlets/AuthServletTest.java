@@ -1,10 +1,10 @@
 package org.example.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.dto.UserDTO;
-import org.example.model.User;
-import org.example.model.UserRole;
-import org.example.service.AuthService;
+import org.example.domain.dto.UserDTO;
+import org.example.domain.model.User;
+import org.example.domain.model.UserRole;
+import org.example.service.AuthServiceJdbc;
 import org.example.service.AuditService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 class AuthServletTest {
 
     private AuthServlet authServlet;
-    private AuthService authService;
+    private AuthServiceJdbc authService;
     private AuditService auditService;
     private ObjectMapper objectMapper;
     private HttpServletRequest request;
@@ -30,7 +30,7 @@ class AuthServletTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        authService = mock(AuthService.class);
+        authService = mock(AuthServiceJdbc.class);
         auditService = mock(AuditService.class);
         objectMapper = new ObjectMapper();
 

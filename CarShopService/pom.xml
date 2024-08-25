@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -11,34 +12,37 @@
   <url>http://maven.apache.org</url>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>17</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
-    <junit-jupiter.version>5.10.3</junit-jupiter.version>
-    <testcontainers.version>1.20.1</testcontainers.version>
-    <mockito-core.version>5.12.0</mockito-core.version>
-    <assertj-core.version>3.26.3</assertj-core.version>
+    <maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
+    <!--Servlet API-->
+    <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
+    <!--Spring-->
+    <spring.version>6.0.23</spring.version>
+    <!--Lombok-->
     <lombok.version>1.18.34</lombok.version>
+    <!--Jackson for JSON processing -->
+    <jackson.version>2.17.2</jackson.version>
+    <mapstruct.version>1.6.0</mapstruct.version>
+    <plugin.war.version>3.3.1</plugin.war.version>
+    <!--JUnit for testing -->
+    <junit-jupiter.version>5.10.3</junit-jupiter.version>
+    <!--Mockito for mocking dependencies -->
+    <mockito-core.version>5.12.0</mockito-core.version>
+    <!--assertj for better readability in tests. -->
+    <assertj-core.version>3.26.3</assertj-core.version>
+    <!--SLF4J (Simple Logging Facade for Java) -->
     <logback-classic.version>1.5.6</logback-classic.version>
     <slf4j-api.version>2.0.16</slf4j-api.version>
     <!--JDBC-->
     <postgresql.version>42.7.3</postgresql.version>
     <liquibase-core.version>4.29.1</liquibase-core.version>
-    <!--Servlet API-->
-    <mapstruct.version>1.6.0</mapstruct.version>
-    <javax.servlet.version>4.0.1</javax.servlet.version>
-    <jackson.version>2.17.2</jackson.version>
-    <jstl.version>1.2</jstl.version>
-
-    <aspectj.version>1.9.22</aspectj.version>
-    <jetty-servlet.version>11.0.22</jetty-servlet.version>
-    <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
-    <jakarta.validation-api.version>3.1.0</jakarta.validation-api.version>
-    <hibernate-validator.version>9.0.0.Beta2</hibernate-validator.version>
-    <!--Spring-->
-    <spring-context.version>6.1.12</spring-context.version>
-
+    <springfox-swagger.version>3.0.0</springfox-swagger.version>
+    <!--ORM Object-Relational Mapping-->
+    <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
+    <jakarta.validation.version>3.1.0</jakarta.validation.version>
+    <validation-api.version>2.0.1.Final</validation-api.version>
   </properties>
 
   <dependencies>
@@ -49,21 +53,18 @@
       <version>${junit-jupiter.version}</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
     <groupId>org.junit.jupiter</groupId>
     <artifactId>junit-jupiter-engine</artifactId>
     <version>${junit-jupiter.version}</version>
     <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <version>${mockito-core.version}</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
@@ -71,17 +72,11 @@
       <scope>test</scope>
     </dependency>
 
+    <!-- Spring Test for MockMvc -->
     <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>postgresql</artifactId>
-      <version>${testcontainers.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <version>${testcontainers.version}</version>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${spring.version}</version>
       <scope>test</scope>
     </dependency>
 
@@ -100,7 +95,6 @@
       <version>${logback-classic.version}</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -113,47 +107,28 @@
       <artifactId>postgresql</artifactId>
       <version>${postgresql.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.liquibase</groupId>
       <artifactId>liquibase-core</artifactId>
       <version>${liquibase-core.version}</version>
     </dependency>
-
-    <!-- Servlet API + -->
     <dependency>
-      <groupId>jakarta.servlet</groupId>
-      <artifactId>jakarta.servlet-api</artifactId>
-      <version>${jakarta.servlet-api.version}</version>
-      <scope>provided</scope>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+      <version>${spring.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <version>${javax.servlet.version}</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>jstl</artifactId>
-      <version>${jstl.version}</version>
-    </dependency>
-
-    <!-- Jackson -->
+    <!-- JSON -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
       <version>${jackson.version}</version>
     </dependency>
-
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-hibernate5</artifactId>
       <version>${jackson.version}</version>
     </dependency>
-
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jsr310</artifactId>
@@ -166,7 +141,6 @@
       <artifactId>mapstruct</artifactId>
       <version>${mapstruct.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.mapstruct</groupId>
       <artifactId>mapstruct-processor</artifactId>
@@ -174,65 +148,90 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- Validation API -->
+    <!-- Spring -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+
+    <!-- AOP Aspects-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aop</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aspects</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+
+    <!-- Swagger and Swagger UI -->
+    <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-swagger2</artifactId>
+      <version>${springfox-swagger.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-swagger-ui</artifactId>
+      <version>${springfox-swagger.version}</version>
+    </dependency>
+
+    <!-- Object-Relational Mapping-->
     <dependency>
       <groupId>jakarta.validation</groupId>
       <artifactId>jakarta.validation-api</artifactId>
-      <version>${jakarta.validation-api.version}</version>
+      <version>${jakarta.validation.version}</version>
     </dependency>
-
+    <dependency>
+      <groupId>jakarta.persistence</groupId>
+      <artifactId>jakarta.persistence-api</artifactId>
+      <version>${jakarta.validation.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.hibernate.validator</groupId>
       <artifactId>hibernate-validator</artifactId>
       <version>${hibernate-validator.version}</version>
     </dependency>
 
-    <!-- AspectJ -->
     <dependency>
-      <groupId>org.aspectj</groupId>
-      <artifactId>aspectjrt</artifactId>
-      <version>${aspectj.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.aspectj</groupId>
-      <artifactId>aspectjweaver</artifactId>
-      <version>${aspectj.version}</version>
-    </dependency>
-
-    <!-- Servlet Testing (JUnit + MockServlet) -->
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-servlet</artifactId>
-      <version>${jetty-servlet.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-server</artifactId>
-      <version>${jetty-servlet.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- Spring -->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-      <version>${spring-context.version}</version>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>${validation-api.version}</version>
     </dependency>
 
 
   </dependencies>
 
+
+
   <build>
     <pluginManagement>
       <plugins>
+        <!-- packaging Java web app as a WAR -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>${plugin.war.version}</version>
+        </plugin>
         <!-- Compiler Plugin for MapStruct -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.10.1</version>
+          <version>${maven.compiler.plugin.version}</version>
+
           <configuration>
             <source>${java.version}</source>
             <target>${java.version}</target>
@@ -242,18 +241,15 @@
                 <artifactId>mapstruct-processor</artifactId>
                 <version>${mapstruct.version}</version>
               </path>
+              <path>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+              </path>
             </annotationProcessorPaths>
           </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <includes>
-          <include>**/*</include>
-        </includes>
-      </resource>
-    </resources>
   </build>
 </project>

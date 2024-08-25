@@ -1,8 +1,9 @@
 package org.example.service;
 
+import org.example.domain.model.*;
 import org.example.model.*;
 import org.example.repository.*;
-import org.example.util.AuditLog;
+import org.example.domain.model.AuditLog;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

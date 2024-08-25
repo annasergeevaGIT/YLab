@@ -1,11 +1,11 @@
 package org.example.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.dto.CarDTO;
-import org.example.model.Car;
-import org.example.model.CarStatus;
-import org.example.model.User;
-import org.example.model.UserRole;
+import org.example.domain.dto.CarDTO;
+import org.example.domain.model.Car;
+import org.example.domain.model.CarStatus;
+import org.example.domain.model.User;
+import org.example.domain.model.UserRole;
 import org.example.service.CarService;
 import org.example.util.DTOValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -133,7 +133,8 @@ public class CarServletTest {
 
         when(request.getReader()).thenReturn(new BufferedReader(new StringReader("{\"brand\":\"GAZ-13\",\"model\":\"Chaika\",\"year\":2023,\"price\":30000,\"status\":\"AVAILABLE\"}")));
         when(dtoValidator.validateCarDTO(carDTO)).thenReturn(Arrays.asList());
-        doNothing().when(carService).updateCar("GAZ-13", "Chaika", 2023, 30000, CarStatus.AVAILABLE);
+        Car car = new Car("GAZ-13", "Chaika", 2023, 30000, CarStatus.AVAILABLE);
+        doNothing().when(carService).updateCar(car);
 
         carServlet.doPut(request, response);
 

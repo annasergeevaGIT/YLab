@@ -3,9 +3,10 @@ package org.example.service;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.dto.OrderDTO;
+import org.example.domain.model.*;
 import org.example.model.*;
 import org.example.repository.*;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Service
 public class OrderService {
     private OrderRepository orderRepository;
     private CarRepository carRepository;
@@ -69,7 +71,7 @@ public class OrderService {
             order.setStatus(status);
             orderRepository.update(order);
             // Log
-            auditService.logAction(user, "Updated order status to " + status + " for order ID: " + orderId);
+            auditService.logAction(user.getId(), "Updated order status to " + status + " for order ID: " + orderId);
             if (status == OrderStatus.CANCELLED) {
                 order.getCar().setStatus(CarStatus.AVAILABLE);
             } else if (status == OrderStatus.COMPLETED) {
@@ -100,7 +102,7 @@ public class OrderService {
             order.getCar().setStatus(CarStatus.AVAILABLE);
             orderRepository.update(order);
             carRepository.update(order.getCar());
-            auditService.logAction(user, "Cancelled order ID: " + orderId + "User ID:" + user.getId()); // Audit log
+            auditService.logAction(user.getId(), "Cancelled order ID: " + orderId + "User ID:" + user.getId()); // Audit log
         }
     }
 

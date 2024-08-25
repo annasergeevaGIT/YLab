@@ -1,10 +1,9 @@
 package org.example.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.dto.OrderDTO;
+import org.example.domain.dto.OrderDTO;
+import org.example.domain.model.*;
 import org.example.model.*;
-import org.example.model.OrderStatus;
-import org.example.model.UserRole;
 import org.example.service.OrderService;
 import org.example.util.DTOValidator;
 import org.junit.jupiter.api.BeforeEach;

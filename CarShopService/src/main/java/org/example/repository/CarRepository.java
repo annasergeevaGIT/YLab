@@ -2,15 +2,18 @@ package org.example.repository;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.example.model.Car;
-import org.example.config.DatabaseService;
+import org.example.domain.model.Car;
+import org.example.config.jdbc.DatabaseService;
+import org.springframework.stereotype.Repository;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Slf4j
-public class CarRepository {
+@Repository
+public class CarRepository implements Crud<Car>{
     private static final DatabaseService databaseService = new DatabaseService();
     private Connection connection;
 
@@ -27,6 +30,7 @@ public class CarRepository {
      *
      * @param car the car to save
      */
+    @Override
     public void create(Car car) {
         String sql = "INSERT INTO entity_schema.cars (model, brand, year, price) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -54,6 +58,7 @@ public class CarRepository {
      *
      * @return the list of cars
      */
+    @Override
     public List<Car> findAll() {
         List<Car> cars = new ArrayList<>();
         String sql = "SELECT * FROM entity_schema.cars";
@@ -82,6 +87,7 @@ public class CarRepository {
      * @param id the ID of the car to find
      * @return the car if found, otherwise null
      */
+    @Override
     public Car findById(int id) {
         Car car = null;
         String sql = "SELECT * FROM entity_schema.cars WHERE id = ?";
@@ -110,6 +116,7 @@ public class CarRepository {
      *
      * @param car the car to update
      */
+    @Override
     public void update(Car car) {
         String sql = "UPDATE entity_schema.cars SET model = ?, brand = ?, year = ?, price = ? WHERE id = ?";
 
@@ -130,6 +137,7 @@ public class CarRepository {
      *
      * @param id the ID of the car to delete
      */
+    @Override
     public void delete(int id) {
         String sql = "DELETE FROM entity_schema.cars WHERE id = ?";
 

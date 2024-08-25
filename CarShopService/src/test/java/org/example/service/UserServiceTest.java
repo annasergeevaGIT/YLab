@@ -1,8 +1,8 @@
 package org.example.service;
 
 
-import org.example.model.User;
-import org.example.model.UserRole;
+import org.example.domain.model.User;
+import org.example.domain.model.UserRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

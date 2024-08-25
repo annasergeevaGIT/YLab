@@ -19,7 +19,7 @@ public class ApplicationContext {
     private final UserService userService;
     private final CarService carService;
     private final OrderService orderService;
-    private final AuthService authService;
+    private final AuthServiceJdbc authService;
     private final AuditService auditService;
     private final SearchService searchService;
     private final ObjectMapper objectMapper;
@@ -38,7 +38,7 @@ public class ApplicationContext {
         // Initialize services
         this.auditService = new AuditService(auditRepository);
         this.userService = new UserService(userRepository);
-        this.authService = new AuthService(userRepository, auditService);
+        this.authService = new AuthServiceJdbc(userRepository, auditService);
         this.carService = new CarService(carRepository, auditService, authService);
         this.orderService = new OrderService(orderRepository, carRepository, userRepository, auditService);
         this.searchService = new SearchService(carRepository, orderRepository, userRepository, auditRepository);
@@ -95,7 +95,7 @@ public class ApplicationContext {
         return orderService;
     }
 
-    public AuthService getAuthService() {
+    public AuthServiceJdbc getAuthService() {
         return authService;
     }
 
