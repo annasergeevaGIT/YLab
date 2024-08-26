@@ -30,10 +30,10 @@ public class AuditServiceTest {
     @Test
     @DisplayName("Test logAction() - Should log a user action")
     void testLogAction() {
-        User user = new User(1, "admin", "password", UserRole.ADMIN,null);
+        User user = new User(1, "admin", "password", "customer@gmail.com", 19,UserRole.ADMIN,null);
         String action = "Added car: Toyota Camry";
 
-        auditService.logAction(user, action);
+        auditService.logAction(user.getId(), action);
 
         verify(auditRepository, times(1)).create(any(AuditLog.class));
     }
@@ -41,9 +41,9 @@ public class AuditServiceTest {
     @Test
     @DisplayName("Test getAllLogs() - Should retrieve all audit logs")
     void testGetAllLogs() {
-        User user = new User(1, "admin", "password", UserRole.ADMIN,null);
-        AuditLog log1 = new AuditLog(1, user, "Action 1", LocalDateTime.now());
-        AuditLog log2 = new AuditLog(2, user, "Action 2", LocalDateTime.now());
+        User user = new User(1, "admin", "password", "customer@gmail.com", 19,UserRole.ADMIN,null);
+        AuditLog log1 = new AuditLog(1, user.getId(), "Action 1", LocalDateTime.now());
+        AuditLog log2 = new AuditLog(2, user.getId(), "Action 2", LocalDateTime.now());
         when(auditRepository.findAll()).thenReturn(Arrays.asList(log1, log2));
 
         List<AuditLog> logs = auditService.getAllLogs();

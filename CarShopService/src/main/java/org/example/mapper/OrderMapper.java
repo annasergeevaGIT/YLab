@@ -12,7 +12,6 @@ import java.util.List;
  */
 @Mapper
 public interface OrderMapper {
-    OrderMapper orderMapper = Mappers.getMapper(OrderMapper.class);
     OrderDTO toDTO(Order order);
     Order toEntity(OrderDTO orderDTO);
     List<OrderDTO> toDTOList(List<Order> orders);

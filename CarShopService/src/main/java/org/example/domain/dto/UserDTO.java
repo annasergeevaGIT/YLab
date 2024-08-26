@@ -4,25 +4,33 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
-import org.example.domain.model.Order;
+import jakarta.validation.constraints.NotNull;
 import org.example.domain.model.UserRole;
-import java.util.List;
+
 /**
  * Data Transfer Object for User.
  */
 public record UserDTO(
-        @JsonProperty
-        @NotEmpty(message = "User ID cannot be empty")
-        int id,             // Unique identifier for the user
+        @JsonProperty("user_id")
+        int id, // Unique identifier for the user
+
+        @JsonProperty("user_name")
         @NotEmpty(message = "Username cannot be empty")
-        String username,    // User's username
+        String username, // User's username
+
+        @JsonProperty("password")
         @NotEmpty(message = "Password cannot be empty")
-        String password,    // User's password
-        @Email
-        String email,       // User's Email
-        @Min(value = 17, message = "must be more then 17 years old")
-        int age,            // User's age, must be more than 18
-        @NotEmpty(message = "Role cannot be empty")
-        UserRole userRole,  // User's role in the system
-        List<Order> orders  // List of orders associated with the user
-){}
+        String password, // User's password
+
+        @JsonProperty("email_address")
+        @Email(message = "Invalid email format")
+        String email, // User's Email
+
+        @JsonProperty("user_age")
+        @Min(value = 18, message = "Age must be 18 years or older")
+        int age, // User's age
+
+        @JsonProperty("role")
+        @NotNull(message = "Role cannot be null")
+        UserRole userRole // User's role in the system
+) {}

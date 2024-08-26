@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/postgres # Use 'db' as the hostname (service name in Docker Compose)
     username: root
     password: root
     driver-class-name: org.postgresql.Driver

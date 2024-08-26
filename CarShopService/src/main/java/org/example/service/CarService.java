@@ -3,7 +3,6 @@ package org.example.service;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.example.domain.model.Car;
-import org.example.domain.model.CarStatus;
 import org.example.domain.model.User;
 import org.example.repository.CarRepository;
 import org.springframework.stereotype.Service;

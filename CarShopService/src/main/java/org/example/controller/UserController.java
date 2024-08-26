@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -39,8 +42,21 @@ public class UserController {
      * @return response entity with status
      */
     @PutMapping("/{userId}/role")
-    public ResponseEntity<String> changeUserRole(@PathVariable int userId, @RequestParam String newRole) {
-        UserRole role = UserRole.valueOf(newRole.toUpperCase());
+    public ResponseEntity<String> changeUserRole(
+            @PathVariable int userId,
+            @RequestParam @NotEmpty(message = "Role cannot be empty") String newRole) {
+
+        UserRole role;
+        try {
+            role = UserRole.valueOf(newRole.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>("Invalid role provided.", HttpStatus.BAD_REQUEST);
+        }
+
+        if (!userService.userExists(userId)) {
+            return new ResponseEntity<>("User not found.", HttpStatus.NOT_FOUND);
+        }
+
         userService.updateUserRole(userId, role);
         return new ResponseEntity<>("User role is updated.", HttpStatus.OK);
     }
@@ -52,7 +68,7 @@ public class UserController {
      * @return response entity with status
      */
     @PostMapping
-    public ResponseEntity<String> addUser(@RequestBody User user) {
+    public ResponseEntity<String> addUser(@RequestBody @Valid User user) {
         userService.addUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getAge(), user.getRole());
         return new ResponseEntity<>("User is added.", HttpStatus.CREATED);
     }
@@ -65,6 +81,10 @@ public class UserController {
      */
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> removeUser(@PathVariable int userId) {
+        if (!userService.userExists(userId)) {
+            return new ResponseEntity<>("User not found.", HttpStatus.NOT_FOUND);
+        }
+
         userService.deleteUser(userId);
         return new ResponseEntity<>("User is removed.", HttpStatus.NO_CONTENT);
     }

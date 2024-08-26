@@ -1,14 +1,13 @@
 package org.example.config;
 
-import org.springframework.web.WebApplicationInitializer;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+/**
+ * Initializes the Spring MVC application.
+ */
 @EnableWebMvc
-public class MainWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer
-        implements WebApplicationInitializer {
+public class MainWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
@@ -24,12 +23,4 @@ public class MainWebAppInitializer extends AbstractAnnotationConfigDispatcherSer
     protected String[] getServletMappings() {
         return new String[] { "/" };  // Map the dispatcher servlet to "/"
     }
-
-
-    protected DispatcherServlet createDispatcherServlet(AnnotationConfigWebApplicationContext context) {
-        DispatcherServlet dispatcherServlet = new DispatcherServlet(context);
-        dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
-        return dispatcherServlet;
-    }
 }
-

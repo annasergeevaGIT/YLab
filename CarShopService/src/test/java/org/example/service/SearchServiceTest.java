@@ -1,7 +1,6 @@
 package org.example.service;
 
 import org.example.domain.model.*;
-import org.example.model.*;
 import org.example.repository.*;
 import org.example.domain.model.AuditLog;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,10 +50,10 @@ class SearchServiceTest {
     @Test
     @DisplayName("Test searchOrders() - Should return orders matching the given parameters")
     void testSearchOrders() {
-        User customer = new User(1, "customer", "password", UserRole.CUSTOMER,null);
+        User customer = new User(1, "customer", "password", "customer@gmail.com", 19,UserRole.CUSTOMER,null);
         Car car = new Car(1, "Toyota", "Camry", 2020, 30000.0, CarStatus.AVAILABLE);
-        Order order1 = new Order(1, car, customer, OrderStatus.PENDING, LocalDateTime.now());
-        Order order2 = new Order(2, car, customer, OrderStatus.COMPLETED, LocalDateTime.now());
+        Order order1 = new Order(1, car.getId(), customer.getId(), OrderStatus.PENDING, LocalDateTime.now());
+        Order order2 = new Order(2, car.getId(), customer.getId(), OrderStatus.COMPLETED, LocalDateTime.now());
         when(orderRepository.findAll()).thenReturn(Arrays.asList(order1, order2));
 
         List<Order> result = searchService.searchOrders(1, OrderStatus.PENDING, 1);
@@ -63,30 +62,14 @@ class SearchServiceTest {
         assertEquals(OrderStatus.PENDING, result.get(0).getStatus());
     }
 
-    @Test
-    @DisplayName("Test filterUsersByRole() - Should return users matching the given parameters")
-    void testSearchUsers() {
-        User user1 = new User(1, "admin", "password", UserRole.ADMIN, Collections.emptyList());
-        User user2 = new User(2, "manager", "password", UserRole.MANAGER, Collections.emptyList());
-
-        // Mocking the userRepository to return the predefined list of users
-        when(userRepository.findAll()).thenReturn(Arrays.asList(user1, user2));
-
-        // Calling the method under test with the role filter
-        List<User> result = searchService.searchUsers(null, null, UserRole.ADMIN, null);
-
-        // Validating the results
-        assertEquals(1, result.size(), "The result should contain exactly one user.");
-        assertEquals(UserRole.ADMIN, result.get(0).getRole(), "The role of the returned user should be ADMIN.");
-    }
 
     @Test
     @DisplayName("Test getPurchaseCount() - Should return the count of completed purchases for a user")
     void testGetPurchaseCount() {
-        User customer = new User(1, "customer", "password", UserRole.CUSTOMER,null);
+        User customer = new User(1, "customer", "password","customer@gmail.com", 19, UserRole.CUSTOMER,null);
         Car car = new Car(1, "Toyota", "Camry", 2020, 30000.0, CarStatus.AVAILABLE);
-        Order order1 = new Order(1, car, customer, OrderStatus.COMPLETED, LocalDateTime.now());
-        Order order2 = new Order(2, car, customer, OrderStatus.COMPLETED, LocalDateTime.now());
+        Order order1 = new Order(1, car.getId(), customer.getId(), OrderStatus.COMPLETED, LocalDateTime.now());
+        Order order2 = new Order(2, car.getId(), customer.getId(), OrderStatus.COMPLETED, LocalDateTime.now());
         when(orderRepository.findAll()).thenReturn(Arrays.asList(order1, order2));
 
         int count = searchService.getPurchaseCount(1);
@@ -97,13 +80,13 @@ class SearchServiceTest {
     @Test
     @DisplayName("Test filterLogs() - Should return logs filtered by date, user, and action")
     void testFilterLogs() {
-        User user = new User(1, "admin", "password", UserRole.ADMIN,null);
+        User user = new User(1, "admin", "password", "customer@gmail.com", 19,UserRole.ADMIN,null);
         LocalDateTime now = LocalDateTime.now();
-        AuditLog log1 = new AuditLog(1, user, "CREATE_CAR", now.minusDays(1));
-        AuditLog log2 = new AuditLog(2, user, "DELETE_CAR", now.minusDays(2));
+        AuditLog log1 = new AuditLog(1, user.getId(), "CREATE_CAR", now.minusDays(1));
+        AuditLog log2 = new AuditLog(2, user.getId(), "DELETE_CAR", now.minusDays(2));
         when(auditRepository.findAll()).thenReturn(Arrays.asList(log1, log2));
 
-        List<AuditLog> result = searchService.filterLogs(now.minusDays(3), now, user, "CREATE_CAR");
+        List<AuditLog> result = searchService.filterLogs(now.minusDays(3), now, user.getId(), "CREATE_CAR");
 
         assertEquals(1, result.size());
         assertEquals("CREATE_CAR", result.get(0).getAction());

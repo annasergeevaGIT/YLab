@@ -12,7 +12,6 @@ import java.util.List;
  * Interface for mapping to DTO and back
  */
 public interface UserMapper {
-    UserMapper userMapper = Mappers.getMapper(UserMapper.class);
     UserDTO toDTO(User user);
     User toEntity(UserDTO userDTO);
     List<UserDTO> toDTOList(List<User> users);

@@ -3,9 +3,11 @@ package org.example.service;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.domain.dto.OrderDTO;
 import org.example.domain.model.*;
-import org.example.model.*;
-import org.example.repository.*;
+import org.example.repository.CarRepository;
+import org.example.repository.OrderRepository;
+import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -35,23 +37,23 @@ public class OrderService {
     /**
      * Creates a new order.
      *
-     * @param carId     the ID of the car to order
-     * @param customerId the ID of the customer placing the order
+     * @param orderDTO     the ID of the car to order
      * @return the created order if successful, else throws an exception
      */
-    public void createOrder(int carId, int customerId) {
-        Car car = carRepository.findById(carId);
-        User user = userRepository.findById(customerId);
+    public Order createOrder(OrderDTO orderDTO) {
+        Car car = carRepository.findById(orderDTO.carId());
+        User user = userRepository.findById(orderDTO.userId());
 
         if (car != null && user != null && "AVAILABLE".equalsIgnoreCase(String.valueOf(car.getStatus()))) {
-            Order newOrder = new Order(car, user, OrderStatus.PENDING);
+            Order newOrder = new Order(car.getId(), user.getId(), OrderStatus.PENDING);
             orderRepository.create(newOrder);
 
             // Mark the car as unavailable and update its status in the repository
             car.setStatus(CarStatus.RESERVED);
             carRepository.update(car);
             // Log the creation of the order
-            auditService.logAction(user, "Created order for car: " + car.getBrand() + " " + car.getModel());
+            auditService.logAction(user.getId(), "Created order for car: " + car.getBrand() + " " + car.getModel());
+            return newOrder;
         } else {
             throw new IllegalArgumentException("Car or customer not found.");
         }
@@ -64,18 +66,18 @@ public class OrderService {
      * @param status  new status of the order (AVAILABLE, RESERVED, SOLD)
      */
 
-    public void updateOrderStatus(int orderId, OrderStatus status) {
+    public Order updateOrderStatus(int orderId, OrderStatus status) {
         Order order = orderRepository.findById(orderId);
-        User user = order.getUser();
+        User user = userRepository.findById(orderId);
+        Car car = carRepository.findById(order.getCarId());
         if (order != null) {
             order.setStatus(status);
             orderRepository.update(order);
-            // Log
             auditService.logAction(user.getId(), "Updated order status to " + status + " for order ID: " + orderId);
             if (status == OrderStatus.CANCELLED) {
-                order.getCar().setStatus(CarStatus.AVAILABLE);
+                car.setStatus(CarStatus.AVAILABLE);
             } else if (status == OrderStatus.COMPLETED) {
-                order.getCar().setStatus(CarStatus.SOLD);
+                car.setStatus(CarStatus.SOLD);
                 //Add the completed order to the users list of orders
                 List<Order> userOrders = user.getOrders();
                 if (userOrders == null) {
@@ -84,9 +86,11 @@ public class OrderService {
                 userOrders.add(order);
                 user.setOrders(userOrders);
             }
-            carRepository.update(order.getCar());
-            auditService.logAction(user, "Updated car, set new status " + order.getCar().getStatus());
+            carRepository.update(car);
+            auditService.logAction(user.getId(), "Updated car, set new status " + car.getStatus());
+            return order;
         }
+        return null;
     }
 
     /**
@@ -96,12 +100,13 @@ public class OrderService {
      */
     public void cancelOrder(int orderId) {
         Order order = orderRepository.findById(orderId);
-        User user = order.getUser();
+        User user = userRepository.findById(orderId);
+        Car car = carRepository.findById(order.getCarId());
         if (order != null) {
             order.setStatus(OrderStatus.CANCELLED);
-            order.getCar().setStatus(CarStatus.AVAILABLE);
+            car.setStatus(CarStatus.AVAILABLE);
             orderRepository.update(order);
-            carRepository.update(order.getCar());
+            carRepository.update(car);
             auditService.logAction(user.getId(), "Cancelled order ID: " + orderId + "User ID:" + user.getId()); // Audit log
         }
     }

@@ -1,7 +1,6 @@
 package org.example.service;
 
 import org.example.domain.dto.UserDTO;
-import org.example.domain.model.User;
 
 /**
  * Interface for authentication and authorization

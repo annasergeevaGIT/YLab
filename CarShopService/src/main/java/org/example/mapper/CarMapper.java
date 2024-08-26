@@ -12,7 +12,6 @@ import java.util.List;
  */
 @Mapper
 public interface CarMapper {
-    CarMapper carMapper = Mappers.getMapper(CarMapper.class);
     CarDTO toDTO(Car car);
     Car toEntity(CarDTO carDTO);
     List<CarDTO> toDTOList(List<Car> cars);

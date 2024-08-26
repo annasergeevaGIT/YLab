@@ -28,7 +28,7 @@ public class AuthController {
      */
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody UserDTO userDTO) {
-        User user = userMapper.toEntity(userDTO);
+
 
         if (authService.register(userDTO)) {
             return new ResponseEntity<>("Register successful.", HttpStatus.CREATED);
@@ -45,7 +45,8 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody UserDTO userDTO) {
-        User user = authService.login(userDTO.username(), userDTO.password());
+        UserDTO newUserDTO = authService.login(userDTO.username(), userDTO.password());
+        User user = userMapper.toEntity(newUserDTO);
 
         if (user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);

@@ -99,7 +99,7 @@ public class SearchController {
 
         List<AuditLog> logs = searchService.filterLogs(start, end, user.getId(), action);
         List<AuditLogDTO> logDTOs = logs.stream()
-                .map(log -> new AuditLogDTO(log.getId(), log.getTimestamp(), log.getAction(), log.getUser().getId()))
+                .map(log -> new AuditLogDTO(log.getId(), log.getTimestamp(), log.getAction(), log.getUserId()))
                 .collect(Collectors.toList());
 
         User currentUser = authService.getCurrentUser();
@@ -112,7 +112,7 @@ public class SearchController {
     @PostMapping("/export-logs")
     public ResponseEntity<String> exportLogs() {
         try {
-            searchService.exportLogs();
+            auditService.exportLogs();
             User user = authService.getCurrentUser();
             auditService.logAction(user.getId(), "Exported audit logs to file audit_logs.txt");
             return new ResponseEntity<>("Log files successfully exported", HttpStatus.OK);

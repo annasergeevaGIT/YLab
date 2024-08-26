@@ -211,8 +211,12 @@
       <artifactId>validation-api</artifactId>
       <version>${validation-api.version}</version>
     </dependency>
-
-
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>${jakarta.servlet-api.version}</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
 

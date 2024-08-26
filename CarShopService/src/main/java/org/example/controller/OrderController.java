@@ -1,15 +1,16 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.domain.dto.*;
-import org.example.service.OrderService;
+import org.example.domain.dto.OrderDTO;
 import org.example.mapper.OrderMapper;
+import org.example.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -26,7 +27,7 @@ public class OrderController {
      * @return List of OrderDTOs
      */
     @GetMapping
-    public ResponseEntity<List<OrderDTO>> listOrders() {
+    public ResponseEntity<List<OrderDTO>> getAllOrders() {
         List<OrderDTO> orders = orderMapper.toDTOList(orderService.getAllOrders());
         return ResponseEntity.ok(orders);
     }
@@ -46,7 +47,7 @@ public class OrderController {
     /**
      * Update the status of an existing order.
      *
-     * @param orderId             ID of the order to update.
+     * @param orderId  ID of the order to update.
      * @param orderDTO DTO containing the new status.
      * @return Updated OrderDTO
      */
