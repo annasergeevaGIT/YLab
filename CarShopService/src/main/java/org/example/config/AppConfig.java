@@ -24,7 +24,7 @@ import java.util.List;
 @EnableWebMvc
 @EnableSwagger2
 @Configuration
-@ComponentScan(basePackages = "org.example")  // Ensure this package is correct
+@ComponentScan(basePackages = "org.example")
 @EnableAspectJAutoProxy  // Enable AOP Aspects
 public class AppConfig implements WebMvcConfigurer {
 

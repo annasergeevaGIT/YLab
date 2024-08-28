@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.domain.dto.OrderDTO;
 import org.example.mapper.OrderMapper;
 import org.example.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -17,8 +18,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 public class OrderController {
-
+    @Autowired
     private final OrderService orderService;
+    @Autowired
     private final OrderMapper orderMapper;
 
     /**

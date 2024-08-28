@@ -4,6 +4,7 @@ import org.example.domain.dto.CarDTO;
 import org.example.domain.model.Car;
 import org.example.mapper.CarMapper;
 import org.example.service.CarService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class CarController {
 
     private final CarService carService;
+    @Autowired
     private final CarMapper carMapper;
 
     public CarController(CarService carService, CarMapper carMapper) {
