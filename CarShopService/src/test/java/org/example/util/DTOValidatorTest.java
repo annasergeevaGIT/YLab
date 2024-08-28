@@ -1,10 +1,9 @@
 package org.example.util;
 
-import org.example.domain.dto.UserDTO;
 import org.example.domain.dto.CarDTO;
+import org.example.domain.dto.UserDTO;
 import org.example.domain.dto.OrderDTO;
 import org.example.domain.model.*;
-import org.example.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -23,7 +22,7 @@ public class DTOValidatorTest {
     @Test
     void testValidateUserDTO_Valid() {
         // Arrange
-        UserDTO userDTO = new UserDTO(1,"root", "root", UserRole.ADMIN, null);
+        UserDTO userDTO = new UserDTO(1,"root", "root","customer@gmail.com", 19, UserRole.ADMIN);
 
         // Act
         List<String> errors = dtoValidator.validateUserDTO(userDTO);
@@ -39,7 +38,7 @@ public class DTOValidatorTest {
     @Test
     void testValidateUserDTO_MissingUsername() {
         // Arrange
-        UserDTO userDTO = new UserDTO(1,"root", "root", UserRole.ADMIN, null);
+        UserDTO userDTO = new UserDTO(1,"root", "root","customer@gmail.com", 19, UserRole.ADMIN);
 
         // Act
         List<String> errors = dtoValidator.validateUserDTO(userDTO);
@@ -56,7 +55,7 @@ public class DTOValidatorTest {
     @Test
     void testValidateUserDTO_MissingPassword() {
         // Arrange
-        UserDTO userDTO = new UserDTO(1,"root", "root", UserRole.ADMIN, null);
+        UserDTO userDTO = new UserDTO(1,"root", "root","customer@gmail.com", 19, UserRole.ADMIN);
 
         // Act
         List<String> errors = dtoValidator.validateUserDTO(userDTO);
@@ -73,7 +72,7 @@ public class DTOValidatorTest {
     @Test
     void testValidateCarDTO_Valid() {
         // Arrange
-        CarDTO carDTO = new CarDTO(1,"GAZ-13", "Chaika", 2022, 20000.00, CarStatus.AVAILABLE.toString());
+        CarDTO carDTO = new CarDTO(1,"GAZ-13", "Chaika", 2022, 20000.00, CarStatus.AVAILABLE);
 
         // Act
         List<String> errors = dtoValidator.validateCarDTO(carDTO);
@@ -89,7 +88,7 @@ public class DTOValidatorTest {
     @Test
     void testValidateCarDTO_MissingBrand() {
         // Arrange
-        CarDTO carDTO = new CarDTO(1,"GAZ-13", "Chaika", 2022, 20000.00, CarStatus.AVAILABLE.toString());
+        CarDTO carDTO = new CarDTO(1,"GAZ-13", "Chaika", 2022, 20000.00, CarStatus.AVAILABLE);
 
         // Act
         List<String> errors = dtoValidator.validateCarDTO(carDTO);
@@ -106,7 +105,7 @@ public class DTOValidatorTest {
     @Test
     void testValidateCarDTO_MissingModel() {
         // Arrange
-        CarDTO carDTO = new CarDTO(1,"GAZ-13", "Chaika", 2022, 20000.00, CarStatus.AVAILABLE.toString());
+        CarDTO carDTO = new CarDTO(1,"GAZ-13", "Chaika", 2022, 20000.00, CarStatus.AVAILABLE);
 
         // Act
         List<String> errors = dtoValidator.validateCarDTO(carDTO);
@@ -123,7 +122,7 @@ public class DTOValidatorTest {
     @Test
     void testValidateCarDTO_InvalidYearAndPrice() {
         // Arrange
-        CarDTO carDTO = new CarDTO(1,"GAZ-13", "Chaika", 2022, 20000.00, CarStatus.AVAILABLE.toString());
+        CarDTO carDTO = new CarDTO(1,"GAZ-13", "Chaika", 2022, 20000.00, CarStatus.AVAILABLE);
 
         // Act
         List<String> errors = dtoValidator.validateCarDTO(carDTO);
@@ -143,8 +142,8 @@ public class DTOValidatorTest {
     void testValidateOrderDTO_Valid() {
         // Arrange
         Car car = new Car(1, "GAZ-13", "Chaika", 2023, 30000, CarStatus.AVAILABLE);
-        User user = new User(1, "root", "root", UserRole.ADMIN, null);
-        OrderDTO orderDTO = new OrderDTO(1, car, user, OrderStatus.PENDING, LocalDateTime.now());
+        User user = new User(1, "root", "root","customer@gmail.com", 19, UserRole.ADMIN, null);
+        OrderDTO orderDTO = new OrderDTO(1, car.getId(), user.getId(), OrderStatus.PENDING, LocalDateTime.now());
 
         // Act
         List<String> errors = dtoValidator.validateOrderDTO(orderDTO);
@@ -161,8 +160,8 @@ public class DTOValidatorTest {
     void testValidateOrderDTO_InvalidIds() {
         // Arrange
         Car car = new Car(1, "GAZ-13", "Chaika", 2023, 30000, CarStatus.AVAILABLE);
-        User user = new User(1, "root", "root", UserRole.ADMIN, null);
-        OrderDTO orderDTO = new OrderDTO(1, car, user, OrderStatus.PENDING, LocalDateTime.now());
+        User user = new User(1, "root", "root","customer@gmail.com", 19, UserRole.ADMIN, null);
+        OrderDTO orderDTO = new OrderDTO(1, car.getId(), user.getId(), OrderStatus.PENDING, LocalDateTime.now());
 
         // Act
         List<String> errors = dtoValidator.validateOrderDTO(orderDTO);

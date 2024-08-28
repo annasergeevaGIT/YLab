@@ -6,15 +6,14 @@ import org.example.domain.model.User;
 import org.example.domain.model.UserRole;
 import org.example.mapper.UserMapper;
 import org.example.repository.UserRepository;
-import org.example.service.AuthServiceJdbc;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -72,10 +71,10 @@ public class AuthServiceJdbcTest {
 
     @Test
     public void testRegisterAdminSuccess() {
-        UserDTO userDTO = new UserDTO(1,"adminUser", "password", "admin@example.com", 30, UserRole.CUSTOMER );
-        User newAdmin = new User("adminUser", "password", "admin@example.com", 30, UserRole.ADMIN, null);
+        UserDTO userDTO = new UserDTO(1,"root", "root", "admin@example.com", 30, UserRole.CUSTOMER );
+        User newAdmin = new User("root", "root", "admin@example.com", 30, UserRole.ADMIN, null);
 
-        when(userRepository.findByUsername("adminUser")).thenReturn(null);
+        when(userRepository.findByUsername("root")).thenReturn(null);
         doNothing().when(userRepository).create(newAdmin);
         doNothing().when(auditService).logAction(anyInt(), anyString());
 

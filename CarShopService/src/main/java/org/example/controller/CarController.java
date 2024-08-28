@@ -1,7 +1,7 @@
 package org.example.controller;
 
-import org.example.domain.model.Car;
 import org.example.domain.dto.CarDTO;
+import org.example.domain.model.Car;
 import org.example.mapper.CarMapper;
 import org.example.service.CarService;
 import org.springframework.http.HttpStatus;
