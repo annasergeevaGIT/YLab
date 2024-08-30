@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres # Use 'db' as the hostname (service name in Docker Compose)
+    username: root
+    password: root
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    changelogPath: db/changelog/changelog.xml
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG

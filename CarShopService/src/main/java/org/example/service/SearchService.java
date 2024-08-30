@@ -2,10 +2,11 @@ package org.example.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.example.model.*;
+import org.example.domain.model.*;
 import org.example.repository.AuditRepository;
 import org.example.repository.*;
-import org.example.util.AuditLog;
+import org.example.domain.model.AuditLog;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
  */
 @AllArgsConstructor
 @Data
+@Service
 public class SearchService {
     private CarRepository carRepository;
     private OrderRepository orderRepository;
@@ -52,9 +54,9 @@ public class SearchService {
      */
     public List<Order> searchOrders(Integer customerId, OrderStatus status, Integer carId) {
         return orderRepository.findAll().stream()
-                .filter(order -> (customerId == null || order.getUser().getId() == customerId) &&
+                .filter(order -> (customerId == null || order.getUserId()== customerId) &&
                         (status == null || order.getStatus() == status) &&
-                        (carId == null || order.getCar().getId() == carId))
+                        (carId == null || order.getCarId() == carId))
                 .collect(Collectors.toList());
     }
 
@@ -81,7 +83,7 @@ public class SearchService {
      */
     public int getPurchaseCount(int userId) {
         return (int) orderRepository.findAll().stream()
-                .filter(order -> order.getUser().getId() == userId && order.getStatus() == OrderStatus.COMPLETED)
+                .filter(order -> order.getUserId() == userId && order.getStatus() == OrderStatus.COMPLETED)
                 .count();
     }
 
@@ -90,15 +92,15 @@ public class SearchService {
      *
      * @param startDate the start date for filtering
      * @param endDate   the end date for filtering
-     * @param user      the user to filter by (can be null)
+     * @param userId      the user ID to filter by
      * @param action    the action type to filter by (can be null)
      * @return the list of filtered audit log entries
      */
-    public List<AuditLog> filterLogs(LocalDateTime startDate, LocalDateTime endDate, User user, String action) {
+    public List<AuditLog> filterLogs(LocalDateTime startDate, LocalDateTime endDate, Integer userId, String action) {
         return auditRepository.findAll().stream()
                 .filter(log -> (startDate == null || !log.getTimestamp().isBefore(startDate)) &&
                         (endDate == null || !log.getTimestamp().isAfter(endDate)) &&
-                        (user == null || log.getUser().equals(user)) &&
+                        (userId == log.getUserId()) &&
                         (action == null || log.getAction().equalsIgnoreCase(action)))
                 .collect(Collectors.toList());
     }

@@ -1,12 +1,13 @@
 package org.example.service;
 
-import org.example.model.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.example.domain.dto.OrderDTO;
+import org.example.domain.model.*;
 import org.example.repository.CarRepository;
 import org.example.repository.OrderRepository;
 import org.example.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -38,9 +39,9 @@ public class OrderServiceTest {
     @DisplayName("Test getAllOrders() - Should return all orders")
     void testGetAllOrders() {
         Car car = new Car(1, "Toyota", "Camry", 2020, 25000, CarStatus.AVAILABLE);
-        User user = new User(1, "customer", "password", UserRole.CUSTOMER,null);
-        Order order1 = new Order(1, car, user, OrderStatus.PENDING, LocalDateTime.now());
-        Order order2 = new Order(2, car, user, OrderStatus.APPROVED, LocalDateTime.now());
+        User user = new User(1, "customer", "password","customer@gmail.com", 19, UserRole.CUSTOMER,null);
+        Order order1 = new Order(1, car.getId(), user.getId(), OrderStatus.PENDING, LocalDateTime.now());
+        Order order2 = new Order(2, car.getId(), user.getId(), OrderStatus.APPROVED, LocalDateTime.now());
         when(orderRepository.findAll()).thenReturn(Arrays.asList(order1, order2));
 
         List<Order> orders = orderService.getAllOrders();
@@ -53,13 +54,14 @@ public class OrderServiceTest {
     @DisplayName("Test createOrder() - Should create a new order")
     void testCreateOrder() {
         Car car = new Car(1, "Toyota", "Camry", 2020, 25000, CarStatus.AVAILABLE);
-        User customer = new User(1, "customer", "password", UserRole.CUSTOMER,null);
+        User customer = new User(1, "customer", "password", "customer@gmail.com", 19, UserRole.CUSTOMER,null);
+        OrderDTO orderDTO = new OrderDTO(1, car.getId(), customer.getId(), OrderStatus.PENDING, LocalDateTime.now());
         when(carRepository.findById(1)).thenReturn(car);
         when(userRepository.findById(1)).thenReturn(customer);
 
-        orderService.createOrder(1, 1);
+        orderService.createOrder(orderDTO);
 
         verify(orderRepository, times(1)).create(any(Order.class));
-        verify(auditService, times(1)).logAction(customer, "Created order for car: Toyota Camry");
+        verify(auditService, times(1)).logAction(customer.getId(), "Created order for car: Toyota Camry");
     }
 }

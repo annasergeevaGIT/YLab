@@ -1,7 +1,7 @@
 package org.example.repository;
 
-import org.example.model.Car;
-import org.example.model.CarStatus;
+import org.example.domain.model.Car;
+import org.example.domain.model.CarStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

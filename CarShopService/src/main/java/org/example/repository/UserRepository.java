@@ -2,16 +2,19 @@ package org.example.repository;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.example.config.DatabaseService;
-import org.example.model.User;
-import org.example.model.UserRole;
+import org.example.config.jdbc.DatabaseService;
+import org.example.domain.model.User;
+import org.example.domain.model.UserRole;
+import org.springframework.stereotype.Repository;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Slf4j
-public class UserRepository {
+@Repository
+public class UserRepository implements Crud<User> {
     private static final DatabaseService databaseService = new DatabaseService();
     private Connection connection;
     private static final String SEQUENCE_NAME = "entity_schema.users_id_seq";
@@ -30,14 +33,14 @@ public class UserRepository {
      *
      * @param user the user to add
      */
+    @Override
     public void create(User user) {
-
-        String sql = "INSERT INTO entity_schema.users (username, password, role) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO entity_schema.users (username, password, role) VALUES (?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(2, user.getUsername());
-            stmt.setString(3, user.getPassword());
-            stmt.setString(4, user.getRole().toString());
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, user.getPassword());
+            stmt.setString(3, user.getRole().toString());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error saving user to database: " + e.getMessage(), e);
@@ -49,6 +52,7 @@ public class UserRepository {
      *
      * @return a list containing all users
      */
+    @Override
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM entity_schema.users";
@@ -77,6 +81,7 @@ public class UserRepository {
      * @param id the ID of the user to find
      * @return the user if found, otherwise null
      */
+    @Override
     public User findById(int id) {
         User user = null;
         String sql = "SELECT * FROM entity_schema.users WHERE id = ?";
@@ -106,6 +111,7 @@ public class UserRepository {
      * @param username the username of the user to find
      * @return the user if found, otherwise null
      */
+
     public User findByUsername(String username) {
         User user = null;
         String sql = "SELECT * FROM entity_schema.users WHERE username = ?";
@@ -134,6 +140,7 @@ public class UserRepository {
      *
      * @param user the user to update
      */
+    @Override
     public void update(User user) {
         String sql = "UPDATE entity_schema.users SET username = ?, password = ?, role = ? WHERE id = ?";
 
@@ -154,13 +161,13 @@ public class UserRepository {
      * @param id the ID of the user to delete
      * @return true if the user was deleted, otherwise false
      */
-    public boolean delete(int id) {
+    @Override
+    public void delete(int id) {
         String sql = "DELETE FROM entity_schema.users WHERE id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
         } catch (SQLException e) {
             throw new RuntimeException("Error deleting user from database: " + e.getMessage(), e);
         }

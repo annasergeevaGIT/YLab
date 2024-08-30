@@ -1,8 +1,12 @@
 package org.example.service;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.example.model.*;
+import org.example.domain.model.Car;
+import org.example.domain.model.User;
 import org.example.repository.CarRepository;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 /**
@@ -10,10 +14,11 @@ import java.util.List;
  */
 @AllArgsConstructor
 @Data
+@Service
 public class CarService {
     private CarRepository carRepository;
     private AuditService auditService;
-    private AuthService authService;
+    private AuthServiceJdbc authService;
 
     /**
      * Gets all cars.
@@ -26,31 +31,22 @@ public class CarService {
 
     /**
      * Adds a new car
-     * @param brand
-     * @param model
-     * @param year
-     * @param price
-     * @param status
+     * @param car
      */
-    public void addCar(String brand, String model, int year, double price, CarStatus status) {
+    public void addCar(Car car) {
         User user = authService.getCurrentUser();
-        Car car = new Car(brand, model, year, price, status);
         carRepository.create(car);
-        auditService.logAction(user, "Added car: " + car.getBrand() + " " + car.getModel()); // write log file
+        auditService.logAction(user.getId(), "Added car: " + car.getBrand() + " " + car.getModel()); // write log file
     }
 
     /**
      * Update existing car.
-     * @param brand
-     * @param model
-     * @param year
-     * @param price
-     * @param status
+     * @param car
      */
-    public void updateCar(String brand,String model, int year, double price, CarStatus status) {
-        Car car = new Car(brand, model, year, price, status);
+    public void updateCar(Car car) {
         carRepository.update(car);
     }
+
 
     /**
      * Delete the car.
@@ -61,7 +57,7 @@ public class CarService {
         User user = authService.getCurrentUser();
         Car car = carRepository.findById(carId);
         carRepository.delete(carId);
-        auditService.logAction(user, "Removed car: " + car.getBrand() + " " + car.getModel()); // write log file
+        auditService.logAction(user.getId(), "Removed car: " + car.getBrand() + " " + car.getModel()); // write log file
     }
 
     public Car getById(int carId) {

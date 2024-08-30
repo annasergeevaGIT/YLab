@@ -13,9 +13,13 @@
 
     <!-- Create audit_log table -->
     <changeSet id="log-v1" author="anna">
-
+        <preConditions onFail="CONTINUE" onFailMessage="Table 'log' already exists. Skipping changeset.">
+            <not>
+                <tableExists tableName="audit_logs" schemaName="entity_schema"/>
+            </not>
+        </preConditions>
         <createTable tableName="audit_logs" schemaName="entity_schema">
-            <column name="id" type="INTEGER" defaultValueSequenceNext="entity_schema.audit_logs_id_seq">
+            <column name="id" type="INTEGER">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_id" type="INTEGER">
@@ -28,7 +32,9 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
 
+    <changeSet id="log-FK-v1" author="anna">
         <addForeignKeyConstraint baseTableName="audit_log"
                                  baseColumnNames="user_id"
                                  constraintName="fk_audit_log_user"

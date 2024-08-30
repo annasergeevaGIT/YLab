@@ -1,6 +1,9 @@
 package org.example.service;
 
-import org.example.model.*;
+import org.example.domain.model.Car;
+import org.example.domain.model.CarStatus;
+import org.example.domain.model.User;
+import org.example.domain.model.UserRole;
 import org.example.repository.CarRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +27,7 @@ class CarServiceTest {
     private AuditService auditService;
 
     @Mock
-    private AuthService authService;
+    private AuthServiceJdbc authService;
 
     @InjectMocks
     private CarService carService;
@@ -57,17 +60,17 @@ class CarServiceTest {
     @DisplayName("Test addCar() - Should add a car and log the action")
     void testAddCar() {
         // Arrange
-        User user = new User(1, "admin", "password", UserRole.ADMIN, null);
+        User user = new User(1, "admin", "password", "customer@gmail.com", 19,UserRole.ADMIN, null);
         Car car = new Car("Toyota", "Camry", 2020, 25000, CarStatus.AVAILABLE);
 
         when(authService.getCurrentUser()).thenReturn(user);
 
         // Act
-        carService.addCar("Toyota", "Camry", 2020, 25000, CarStatus.AVAILABLE);
+        carService.addCar(car);
 
         // Assert
         verify(carRepository, times(1)).create(any(Car.class));
-        verify(auditService, times(1)).logAction(user, "Added car: Toyota Camry");
+        verify(auditService, times(1)).logAction(user.getId(), "Added car: Toyota Camry");
     }
 
     @Test
@@ -87,7 +90,7 @@ class CarServiceTest {
     @DisplayName("Test deleteCar() - Should delete a car and log the action")
     void testDeleteCar() {
         // Arrange
-        User user = new User(1, "admin", "password", UserRole.ADMIN, null);
+        User user = new User(1, "admin", "password", "customer@gmail.com", 19,UserRole.ADMIN, null);
         Car car = new Car("Toyota", "Camry", 2020, 25000, CarStatus.AVAILABLE);
 
         when(authService.getCurrentUser()).thenReturn(user);
@@ -98,7 +101,7 @@ class CarServiceTest {
 
         // Assert
         verify(carRepository, times(1)).delete(1);
-        verify(auditService, times(1)).logAction(user, "Removed car: Toyota Camry");
+        verify(auditService, times(1)).logAction(user.getId(), "Removed car: Toyota Camry");
     }
 
     @Test

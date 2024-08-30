@@ -11,7 +11,6 @@
 <include file="v1/create-order-table.xml" relativeToChangelogFile="true"/>
 <include file="v1/create-log-table.xml" relativeToChangelogFile="true"/>
 
-
 <include file="v1/insert-car-data.xml" relativeToChangelogFile="true"/>
 <include file="v1/insert-user-data.xml" relativeToChangelogFile="true"/>
 

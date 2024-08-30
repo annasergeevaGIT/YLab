@@ -1,7 +1,7 @@
 package org.example.repository;
 
-import org.example.config.DatabaseService;
-import org.example.config.LiquibaseUpdater;
+import org.example.config.jdbc.DatabaseService;
+import org.example.config.jdbc.LiquibaseUpdater;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

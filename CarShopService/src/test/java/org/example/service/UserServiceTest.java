@@ -1,8 +1,8 @@
 package org.example.service;
 
 
-import org.example.model.User;
-import org.example.model.UserRole;
+import org.example.domain.model.User;
+import org.example.domain.model.UserRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,8 +29,8 @@ public class UserServiceTest {
     @Test
     @DisplayName("Test getAllUsers() - Should return all users")
     void testGetAllUsers() {
-        User user1 = new User(1, "user1", "password1", UserRole.CUSTOMER,null);
-        User user2 = new User(2, "user2", "password2", UserRole.MANAGER,null);
+        User user1 = new User(1, "user1", "password1", "customer@gmail.com", 19,UserRole.CUSTOMER,null);
+        User user2 = new User(2, "user2", "password2", "customer@gmail.com", 19,UserRole.MANAGER,null);
         when(userRepository.findAll()).thenReturn(Arrays.asList(user1, user2));
 
         List<User> users = userService.getAllUsers();
@@ -42,7 +42,7 @@ public class UserServiceTest {
     @Test
     @DisplayName("Test getUserById() - Should return user by ID")
     void testGetUserById() {
-        User user = new User(1, "user1", "password1", UserRole.CUSTOMER,null);
+        User user = new User(1, "user1", "password1","customer@gmail.com", 19, UserRole.CUSTOMER,null);
         when(userRepository.findById(1)).thenReturn(user);
 
         User foundUser = userService.getUserById(1);

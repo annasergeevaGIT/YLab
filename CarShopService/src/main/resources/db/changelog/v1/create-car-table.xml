@@ -13,9 +13,14 @@
 
     <!-- Create cars -->
     <changeSet id="car-v1" author="anna">
+        <preConditions onFail="CONTINUE" onFailMessage="Table 'cars' already exists. Skipping changeset.">
+            <not>
+                <tableExists tableName="cars" schemaName="entity_schema"/>
+            </not>
+        </preConditions>
 
         <createTable tableName="cars" schemaName="entity_schema">
-            <column name="id" type="INTEGER" defaultValueSequenceNext="entity_schema.car_id_seq">
+            <column name="id" type="INTEGER">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="brand" type="VARCHAR(255)">
