@@ -10,12 +10,13 @@ spring:
   liquibase:
     changelogPath: db/changelog/changelog.xml
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-
 logging:
   level:
     root: INFO
     org.springframework.web: DEBUG
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true

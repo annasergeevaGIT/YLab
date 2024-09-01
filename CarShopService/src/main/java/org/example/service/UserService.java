@@ -6,6 +6,7 @@ import org.example.domain.model.User;
 import org.example.domain.model.UserRole;
 import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,11 +14,11 @@ import java.util.List;
  * Service for user management.
  */
 @Slf4j
-@RequiredArgsConstructor // Constructor injection for UserRepository
+@RequiredArgsConstructor
 @Service
 public class UserService {
 
-    private final UserRepository userRepository; // Dependency injection via constructor
+    private final UserRepository userRepository;
 
     /**
      * Gets all users.
@@ -58,6 +59,7 @@ public class UserService {
      * @param userId the user ID to update
      * @param newRole the new role to assign
      */
+    @Transactional
     public void updateUserRole(int userId, UserRole newRole) {
         User user = userRepository.findById(userId);
         if (user != null) {
@@ -70,26 +72,6 @@ public class UserService {
     }
 
     /**
-     * Updates the role of a user by username.
-     *
-     * @param username the username of the user to update
-     * @param newRole the new role to assign
-     * @return true if the update was successful, false otherwise
-     */
-    public boolean updateUserRoleByName(String username, UserRole newRole) {
-        User user = userRepository.findByUsername(username);
-        if (user != null) {
-            user.setRole(newRole);
-            userRepository.update(user);
-            log.info("Updated role for user with username {} to {}", username, newRole);
-            return true;
-        } else {
-            log.error("Failed to update user role for username {}", username);
-            return false;
-        }
-    }
-
-    /**
      * Adds a new user to the repository.
      *
      * @param username the username of the new user
@@ -98,6 +80,7 @@ public class UserService {
      * @param age the age of the new user
      * @param role the role of the new user
      */
+    @Transactional
     public void addUser(String username, String password, String email, int age, UserRole role) {
         User newUser = new User(username, password, email, age, role, null);
         userRepository.create(newUser);
@@ -109,6 +92,7 @@ public class UserService {
      *
      * @param id the ID of the user to delete
      */
+    @Transactional
     public void deleteUser(int id) {
         if (userExists(id)) {
             userRepository.delete(id);

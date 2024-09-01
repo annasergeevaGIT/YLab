@@ -1,8 +1,9 @@
-package org.example.aspect;
+package org.example.auditstarter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.example.domain.model.User;
 import org.example.service.AuditService;
 import org.example.service.AuthServiceJdbc;
@@ -21,8 +22,11 @@ public class AuditAspect {
         this.authService = authService;
     }
 
-    @AfterReturning("execution(* org.example.controller.*.*(..))")
-    public void logUserActions() {
+    @Pointcut("execution(* org.example.service..*(..))")
+    public void serviceMethods() {}
+
+    @AfterReturning(pointcut = "serviceMethods()")
+    public void logAudit() {
         User user = authService.getCurrentUser();
         auditService.logAction(user.getId(), "Performed an action");
     }

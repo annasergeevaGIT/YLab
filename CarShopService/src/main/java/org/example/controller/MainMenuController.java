@@ -24,7 +24,6 @@ public class MainMenuController {
 
     @PostMapping("/start")
     public ResponseEntity<String> startApp() {
-        // Application start logic can be handled here or elsewhere
         return ResponseEntity.ok("Application started successfully.");
     }
 
@@ -34,10 +33,7 @@ public class MainMenuController {
             @RequestParam("choice") int choice) {
 
         Map<String, Object> response = new HashMap<>();
-        // Placeholder for command execution
-        // Here you would execute your command based on the role and choice
         response.put("message", "Executed command for role: " + role + " with choice: " + choice);
-        // Add more details to the response map as needed
 
         return ResponseEntity.ok(response);
     }
@@ -61,7 +57,6 @@ public class MainMenuController {
 
     @PostMapping("/exit")
     public ResponseEntity<String> exitApp() {
-        // Application shutdown logic can be handled here or elsewhere
         return ResponseEntity.ok("Application closed.");
     }
 }

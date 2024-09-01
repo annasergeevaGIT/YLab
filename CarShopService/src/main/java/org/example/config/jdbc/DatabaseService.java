@@ -1,10 +1,11 @@
 package org.example.config.jdbc;
 
-import lombok.Getter;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -16,21 +17,30 @@ import java.util.Properties;
 @Service
 public class DatabaseService {
 
-    private static Connection connection;
+    private Connection connection;
+    private final Properties properties = new Properties();
 
-    private static Properties properties;
-    private static String URL, USER, PASS, SCHEMA;
-    @Getter
-    private static final String CONFIG_FILE = "src/main/resources/config/config.properties";
+    @Value("classpath:config/config.properties")
+    private Resource configFile;
 
-    public static Connection initConnection() throws SQLException, IOException {
+    @PostConstruct
+    private void loadConfigProperties() throws IOException {
+        try (InputStream is = configFile.getInputStream()) {
+            properties.load(is);
+            log.info("Config file loaded: url={}, user={}", url(), user());
+        } catch (IOException e) {
+            log.error("Error loading config file: {}", configFile.getFilename());
+            throw e;
+        }
+    }
+
+    public Connection initConnection() throws SQLException, IOException {
         if (connection == null || connection.isClosed()) {
             try {
-                loadConfigProperties();
                 connection = DriverManager.getConnection(url(), user(), password());
                 connection.createStatement().execute("SET search_path TO " + schema());
                 log.info("Connection to the database established");
-            } catch (SQLException | IOException e) {
+            } catch (SQLException e) {
                 log.error("Error connecting to the database: {}", e.getMessage());
                 throw e;
             }
@@ -38,44 +48,9 @@ public class DatabaseService {
         return connection;
     }
 
-    private static void loadConfigProperties() throws IOException {
-        if (properties == null) {
-            properties = new Properties();
-            try (InputStream is = new FileInputStream(CONFIG_FILE)) {
-                properties.load(is);
-                log.info("Config file loaded: url={}, user={}", url(), user());
-            } catch (IOException e) {
-                log.error("Error loading config file: {}", CONFIG_FILE);
-                throw e;
-            }
-        }
-    }
-
-    private static String url() {
-        return URL != null ? URL : properties.getProperty("database.url");
-    }
-
-    private static String user() {
-        return USER != null ? USER : properties.getProperty("database.username");
-    }
-
-    private static String password() {
-        return PASS != null ? PASS : properties.getProperty("database.password");
-    }
-
-    private static String schema() {
-        return SCHEMA != null ? SCHEMA : properties.getProperty("database.schema");
-    }
-
     public Connection getConnection() throws SQLException, IOException {
         if (connection == null) connection = initConnection();
         return connection;
-    }
-
-    public static void setConnection(String url, String user, String password) {
-        DatabaseService.URL = url;
-        DatabaseService.USER = user;
-        DatabaseService.PASS = password;
     }
 
     public void closeConnection() {
@@ -87,5 +62,21 @@ public class DatabaseService {
                 log.error("Error closing the database connection: {}", e.getMessage());
             }
         }
+    }
+
+    private String url() {
+        return properties.getProperty("database.url");
+    }
+
+    private String user() {
+        return properties.getProperty("database.username");
+    }
+
+    private String password() {
+        return properties.getProperty("database.password");
+    }
+
+    private String schema() {
+        return properties.getProperty("database.schema");
     }
 }

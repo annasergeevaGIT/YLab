@@ -21,13 +21,13 @@
     </appender>
 
     <!-- Logger for auditing user actions via AuditAspect -->
-    <logger name="org.example.aspect.AuditAspect" level="INFO" additivity="false">
+    <logger name="org.example.auditstarter.AuditAspect" level="INFO" additivity="false">
         <appender-ref ref="FILE" />
         <appender-ref ref="STDOUT" />
     </logger>
 
     <!-- Logger for logging method execution time via ExecutionTimeAspect -->
-    <logger name="org.example.aspect.ExecutionTimeAspect" level="INFO" additivity="false">
+    <logger name="org.example.loggingstarter.ExecutionTimeAspect" level="INFO" additivity="false">
         <appender-ref ref="FILE" />
         <appender-ref ref="STDOUT" />
     </logger>

@@ -43,7 +43,7 @@
 
   <!-- Logging Aspect Listener -->
   <listener>
-    <listener-class>org.example.aspect.LoggingAspect</listener-class>
+    <listener-class>org.example.loggingstarter.LoggingAspect</listener-class>
   </listener>
 
   <!-- Logging Aspect Listener -->
