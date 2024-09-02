@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.2.0</version>
+    <version>3.2.9</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -15,13 +15,18 @@
   <packaging>jar</packaging>
 
   <name>CarShopService</name>
-  <url>http://maven.apache.org</url>
+  <url>https://maven.apache.org</url>
 
   <properties>
     <java.version>17</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
+    <!--Servlet API-->
+    <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
+    <!--Spring-->
+    <spring.version>6.0.23</spring.version>
+    <spring-boot.version>3.2.9</spring-boot.version>
     <!--Lombok-->
     <lombok.version>1.18.34</lombok.version>
     <!--Jackson for JSON processing -->
@@ -30,7 +35,6 @@
     <plugin.war.version>3.3.1</plugin.war.version>
     <!--JUnit for testing -->
     <junit-jupiter.version>5.10.3</junit-jupiter.version>
-    <testcontainers>1.20.1</testcontainers>
     <!--Mockito for mocking dependencies -->
     <mockito-core.version>5.12.0</mockito-core.version>
     <!--assertj for better readability in tests. -->
@@ -45,20 +49,43 @@
     <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
     <jakarta.validation.version>3.1.0</jakarta.validation.version>
     <validation-api.version>2.0.1.Final</validation-api.version>
-    <!--Spring-->
-    <spring.version>6.0.23</spring.version>
-    <!--Spring Boot-->
-    <spring-boot.version>3.2.0</spring-boot.version>
-    <!-- SpringDoc for OpenAPI/Swagger documentation -->
-    <springdoc-openapi.version>2.6.0</springdoc-openapi.version>
-    <!-- Starter -->
-    <starter.version>1.0.0</starter.version>
+    <springdoc.version>2.6.0</springdoc.version>
     <springdoc-openapi-ui.version>1.8.0</springdoc-openapi-ui.version>
   </properties>
 
-
-
   <dependencies>
+    <!--SpringBoot-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-aop</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-autoconfigure</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-ui</artifactId>
+      <version>${springdoc-openapi-ui.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>${springdoc.version}</version>
+    </dependency>
     <!--test-->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -67,15 +94,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-    <groupId>org.junit.jupiter</groupId>
-    <artifactId>junit-jupiter-engine</artifactId>
-    <version>${junit-jupiter.version}</version>
-    <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <version>${testcontainers}</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${junit-jupiter.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -183,7 +204,7 @@
       <artifactId>spring-webmvc</artifactId>
       <version>${spring.version}</version>
     </dependency>
-    
+
     <!-- AOP Aspects-->
     <dependency>
       <groupId>org.springframework</groupId>
@@ -195,51 +216,6 @@
       <artifactId>spring-aspects</artifactId>
       <version>${spring.version}</version>
     </dependency>
-
-    <!-- Spring Boot -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-parent</artifactId>
-      <version>${spring-boot.version}</version>
-      <type>pom</type>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-aop</artifactId>
-      <version>${spring-boot.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-parent</artifactId>
-      <version>${spring-boot.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-autoconfigure</artifactId>
-      <version>${spring-boot.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter</artifactId>
-      <version>${spring-boot.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springdoc</groupId>
-      <artifactId>springdoc-openapi-ui</artifactId>
-      <version>${springdoc-openapi-ui.version}</version>
-    </dependency>
-
 
     <!-- Object-Relational Mapping-->
     <dependency>
@@ -263,6 +239,12 @@
       <artifactId>validation-api</artifactId>
       <version>${validation-api.version}</version>
     </dependency>
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>${jakarta.servlet-api.version}</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
 
@@ -274,7 +256,6 @@
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-maven-plugin</artifactId>
         </plugin>
-
         <!-- packaging Java web app as a WAR -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
