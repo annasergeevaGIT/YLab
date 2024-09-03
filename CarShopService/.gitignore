@@ -41,3 +41,4 @@ build/
 # User ignores
 audit_logs.txt
 db_data/
+#db_init
