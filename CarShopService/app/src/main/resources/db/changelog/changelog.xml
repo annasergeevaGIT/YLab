@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+<changeSet id="changelog-v1" author="root">
+    <sql>
+        CREATE SCHEMA IF NOT EXISTS entity_schema;
+    </sql>
+</changeSet>
+
+<include file="v1/create-user-table.xml" relativeToChangelogFile="true"/>
+<include file="v1/create-car-table.xml" relativeToChangelogFile="true"/>
+<include file="v1/create-order-table.xml" relativeToChangelogFile="true"/>
+<include file="v1/create-log-table.xml" relativeToChangelogFile="true"/>
+
+<include file="v1/insert-car-data.xml" relativeToChangelogFile="true"/>
+<include file="v1/insert-user-data.xml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>
